@@ -1,0 +1,189 @@
+version: '3.8'
+
+services:
+  qcon-api-gateway:
+    build:
+      context : ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - '4000:3000'
+    env_file:
+      - ./api-gateway/.env
+    # environment:
+    #   - SERVICE_NAME = "API-Gateway" 
+    #   - PORT = 3000
+    volumes:
+      - ./api-gateway:/app
+    networks:
+      - qconNetwork
+
+  qcon-auth:
+    build:
+      context : ./services/auth
+      dockerfile: Dockerfile
+    ports:
+      - '4001:3001'
+    env_file:
+      - ./services/auth/.env
+    volumes:
+      - ./services/auth:/app
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+
+  qcon-user:
+    build:
+      context : ./services/user
+      dockerfile: Dockerfile
+    ports:
+      - '4002:3002'
+    env_file:
+      - ./services/user/.env
+    # environment:
+    #   - SERVICE_NAME = "User-Service" 
+    #   - PORT = 3001
+    #   - DATABASE_URL="postgresql://postgres:postgres@localhost:5432/user_db?schema=public"
+    #   - DB_NAME ="user_db"
+    #   - DB_HOST ='qcon-postgres'
+    #   - DB_PORT = 5432
+    #   - DB_USER ='postgres'
+    #   - DB_PASSWORD ='postgres'
+    volumes:
+      - ./services/user:/app
+    # command: npm run dev
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+
+  qcon-academic:
+    build:
+      context : ./services/academic
+      dockerfile: Dockerfile
+    ports:
+      - '4003:3003'
+    env_file:
+      - ./services/academic/.env
+    volumes:
+      - ./services/academic:/app
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+  
+  qcon-exam:
+    build:
+      context : ./services/exam
+      dockerfile: Dockerfile
+    ports:
+      - '4004:3004'
+    env_file:
+      - ./services/exam/.env
+    volumes:
+      - ./services/exam:/app
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+
+  qcon-question:
+    build:
+      context : ./services/question
+      dockerfile: Dockerfile
+    ports:
+      - '4005:3005'
+    env_file:
+      - ./services/question/.env
+    volumes:
+      - ./services/question:/app
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+
+  qcon-result:
+    build:
+      context : ./services/result
+      dockerfile: Dockerfile
+    ports:
+      - '4006:3006'
+    env_file:
+      - ./services/result/.env
+    volumes:
+      - ./services/result:/app
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+
+  qcon-postgres:
+    image: postgres:13
+    container_name: qcon_postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      postgres: /var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    volumes:
+      - qcon-postgres-data:/var/lib/postgresql/data/:rw
+    networks:
+      - qconNetwork
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "auth"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  qcon-pgadmin:
+    image: dpage/pgadmin4
+    container_name: qcon_pgadmin
+    restart: on-failure
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@qcon.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+      - '5051:443'
+    volumes:
+      - qcon-pgadmin-data:/var/lib/pgadmin
+    networks:
+      - qconNetwork
+    depends_on:
+      - qcon-postgres
+
+  qcon-redis-stack:
+    image: redis/redis-stack:latest
+    ports:
+      - '6379:6379'
+      - '8001:8001'
+    volumes:
+      - qcon-redis-data:/var/lib/redis-stack
+    environment:
+      - REDIS_ARGS=--save 900 1
+    networks:
+      - qconNetwork
+
+  qcon-rabbitmq:
+    image: rabbitmq:3.8-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - qcon-rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - qconNetwork
+
+networks:
+  qconNetwork:
+    driver: bridge
+
+volumes:
+  qcon-postgres-data:
+  qcon-pgadmin-data:
+  qcon-redis-data:
+  qcon-rabbitmq-data:
+  

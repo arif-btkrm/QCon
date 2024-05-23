@@ -1,0 +1,184 @@
+{
+  "services": {
+    "auth": {
+      "url": "http://host.docker.internal:4001",
+      "routes": [
+        {
+          "path": "/auth/login",
+          "methods": [
+            "post"
+          ],
+          "middlewares": []
+        },
+        {
+          "path": "/auth/verify-token",
+          "methods": [
+            "post"
+          ],
+          "middlewares": []
+        }
+      ]
+    },
+    "user": {
+      "url": "http://host.docker.internal:4002",
+      "routes": [
+        {
+          "path": "/users/:id",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+            
+          ]
+        },
+        {
+          "path": "/user/signin",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+            
+          ]
+        },
+        {
+          "path": "/user/signup",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+            
+          ]
+        },
+        {
+          "path": "/user/profile",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+              "auth"            
+          ]
+        },
+        {
+          "path": "/user/addUser",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+              "auth",
+              "isAdmin"
+          ]
+        }
+      ]
+    },    
+    "academic": {
+      "url": "http://host.docker.internal:4003",
+      "routes": [
+        {
+          "path": "/class",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+            "auth","isAdmin"
+          ]
+        },
+        {
+          "path": "/classes",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+        
+          ]
+        },
+        {
+          "path": "/classes/:id",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+
+          ]
+        },
+        {
+          "path": "/course",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+            "auth","isAdmin"
+          ]
+        },
+        {
+          "path": "/courses",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+        
+          ]
+        },
+        {
+          "path": "/course/:id",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+        
+          ]
+        },
+        {
+          "path": "/courses/:classid",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+        
+          ]
+        }
+      ]
+    },
+    "exam": {
+      "url": "http://host.docker.internal:4004",
+      "routes": [
+        {
+          "path": "/exams",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+            "auth","isTeacher"
+          ]
+        },
+        {
+          "path": "/exams",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+
+          ]
+        },
+        {
+          "path": "/exams/:id",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+        
+          ]
+        },
+        {
+          "path": "/exam/submit",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+            "auth"
+          ]
+        }
+      ]
+    }
+    
+  }
+}
