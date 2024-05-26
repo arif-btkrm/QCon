@@ -7,6 +7,8 @@ const morgan =  require('morgan');
 
 const { configureRoutes } = require('./utils')
 
+const sendToQueue = require('./queue')
+
 dotenv.config();
 
 const app = express();
@@ -38,6 +40,12 @@ configureRoutes(app);
 // health check
 app.get('/health', (_req, res) => {
 	res.json({ message: 'API Gateway is running' });
+});
+
+// health check
+app.get('/admin/setup', (_req, res) => {
+	sendToQueue('setup', 'run service setup')
+	res.json({ message: 'Hello from /setup Route' });
 });
 
 // 404 handler

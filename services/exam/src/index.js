@@ -8,6 +8,8 @@ const {addExam,getExams,getExamById,addSubmit} = require('./controllers/examCont
 
 const {cached} = require('./redis/midlewares');
 
+require('./recieveQueue')
+
 dotenv.config();
 
 const app = express()

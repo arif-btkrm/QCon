@@ -6,6 +6,8 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {getClass,addClass,getCourse,addCourse,getClassById,getCourseById,getCourseByClassId} = require('./controllers/academicController')
 
+require('./recieveQueue')
+
 dotenv.config();
 
 const app = express()

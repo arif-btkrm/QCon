@@ -1,5 +1,20 @@
 {
   "services": {
+    "setup": {
+      "url": "http://host.docker.internal:4000",
+      "routes": [
+        {
+          "path": "/setup",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+            "Setup"
+          ]
+        }
+        
+      ]
+    },
     "auth": {
       "url": "http://host.docker.internal:4001",
       "routes": [

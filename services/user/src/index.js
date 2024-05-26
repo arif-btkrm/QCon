@@ -6,6 +6,8 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {signinController,signupController,userProfileController,addUserController,userByIdController} = require('./controllers/userController')
 
+require('./recieveQueue')
+
 dotenv.config();
 
 const app = express()

@@ -6,6 +6,8 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {getQuestion,addQuestion,getQuestionById,getQuestionsByIds} = require('./controllers/resultController')
 
+require('./recieveQueue')
+
 dotenv.config();
 
 const app = express()
