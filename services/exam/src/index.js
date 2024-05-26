@@ -6,6 +6,8 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {addExam,getExams,getExamById,addSubmit} = require('./controllers/examController')
 
+const {cached} = require('./redis/midlewares');
+
 dotenv.config();
 
 const app = express()
@@ -51,7 +53,7 @@ app.get('/setup', async (req,res)=>{
 app.post('/exam', addExam)
 app.post('/exam/submit', addSubmit)
 app.get('/exams', getExams)
-app.get('/exams/:id', getExamById)
+app.get('/exams/:id', cached, getExamById)
 
 // 404 handler
 app.use((_req, res) => {

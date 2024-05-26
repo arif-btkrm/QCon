@@ -1,5 +1,5 @@
 const pool = require('./../db/db')
-
+const {redis} = require('./../redis/redis')
 
 const addExam = async (req,res)=>{
     const {name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,createdBy} = req.body
@@ -47,6 +47,9 @@ const getExamById = async (req,res)=>{
     try{
         let data = await pool.query(`SELECT * FROM exam WHERE id= '${id}' LIMIT 1`)
         data = data.rows[0]
+        const sdata = JSON.stringify(data)
+        const ExpTime = 10 // 10 Seconds
+        redis.setex(`"${id}"`,ExpTime,sdata)
         res.status(200).json(data)
 
     }catch(err){

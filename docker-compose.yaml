@@ -16,6 +16,8 @@ services:
       - ./api-gateway:/app
     networks:
       - qconNetwork
+    depends_on:
+      - qcon-postgres
 
   qcon-auth:
     build:
@@ -31,6 +33,7 @@ services:
       - qconNetwork
     depends_on:
       - qcon-postgres
+      - qcon-api-gateway
 
   qcon-user:
     build:
@@ -56,6 +59,8 @@ services:
       - qconNetwork
     depends_on:
       - qcon-postgres
+      - qcon-api-gateway
+      - qcon-auth
 
   qcon-academic:
     build:
@@ -71,6 +76,8 @@ services:
       - qconNetwork
     depends_on:
       - qcon-postgres
+      - qcon-api-gateway
+      - qcon-auth
   
   qcon-exam:
     build:
@@ -101,6 +108,8 @@ services:
       - qconNetwork
     depends_on:
       - qcon-postgres
+      - qcon-api-gateway
+      - qcon-auth
 
   qcon-result:
     build:
@@ -116,6 +125,8 @@ services:
       - qconNetwork
     depends_on:
       - qcon-postgres
+      - qcon-api-gateway
+      - qcon-auth
 
   qcon-postgres:
     image: postgres:13
