@@ -16,8 +16,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18'
+      - name: Navigating Directory
+        run: cd api-gateway
       - name: Install dependencies
-        run: cd api-gateway npm i --frozen-lockfile
+        run:  npm i --frozen-lockfile
       - name: Run Tests
         # run: test command
         run: echo "All Test Passed..."
