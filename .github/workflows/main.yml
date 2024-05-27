@@ -1,4 +1,4 @@
-name : QCon Actions
+name : QCon Tets Automation
 
 on:
   push:
@@ -17,8 +17,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18'
-      # - name: Navigating Directory
-        # run: cd api-gateway
       - name: Install dependencies
         run: |
           cd api-gateway  
