@@ -1,4 +1,4 @@
-name: pussh to dockerhub
+name: Push to Public Registry
 
 on:
   push:
