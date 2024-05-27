@@ -7,7 +7,7 @@ on:
 
 jobs:
   push-to-registry:
-    name: API-Gateway Push to docker hub
+    name: Push to docker hub
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,12 +22,10 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: itsarif/qcon
-      - name: Changing Directory
-        run: cd api-gateway
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./Dockerfile
+          file: ./api-gateway/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
