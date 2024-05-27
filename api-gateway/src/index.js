@@ -7,7 +7,7 @@ const morgan =  require('morgan');
 
 const { configureRoutes } = require('./utils')
 
-const sendToQueue = require('./queue')
+const {sendToQueue,sendToAll} = require('./queue')
 
 dotenv.config();
 
@@ -39,12 +39,12 @@ configureRoutes(app);
 
 // health check
 app.get('/health', (_req, res) => {
-	res.json({ message: 'API Gateway is running' });
+	res.status(200).json({ message: 'API Gateway is running and Health OK' });
 });
 
 // health check
 app.get('/admin/setup', (_req, res) => {
-	sendToQueue('setup', 'run service setup')
+	sendToAll('run service setup')
 	res.json({ message: 'Hello from /setup Route' });
 });
 
@@ -63,3 +63,5 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
 	console.log(`API Gateway is running on port ${PORT}`);
 });
+
+module.exports = app
