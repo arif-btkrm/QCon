@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: npm i --frozen-lockfile
+        run: cd api-gateway npm i --frozen-lockfile
       - name: Run Tests
         # run: test command
         run: echo "All Test Passed..."
