@@ -22,10 +22,12 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: itsarif/qcon
+      - name: Changing Directory
+        run: cd api-gateway
       - name: Build and Push
         uses: docker/build-push-action@v3
         with:
-          context: ./api-gateway
+          context: .
           file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
