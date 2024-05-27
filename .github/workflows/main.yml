@@ -7,6 +7,7 @@ on:
 
 jobs:
   test:
+    name: Api-Gateway Test
     runs-on: ubuntu-latest
     steps:
       - run: echo "Action Started"
