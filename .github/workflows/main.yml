@@ -23,7 +23,9 @@ jobs:
           cd api-gateway  
           npm i --frozen-lockfile
       - name: Run Tests
-        run: npm test
+        run: |
+          cd api-gateway
+          npm test
       - name: Endings
         run: echo "All Test Passed..."
 
