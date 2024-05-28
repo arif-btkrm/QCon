@@ -29,6 +29,7 @@ jobs:
         run: echo "All Test Passed..."
 
   push-to-registry:
+    needs: test
     name: Push api-gateway to docker hub
     runs-on: ubuntu-latest
     steps:
