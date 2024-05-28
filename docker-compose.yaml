@@ -17,6 +17,7 @@ services:
     networks:
       - qconNetwork
     depends_on:
+      - qcon-rabbitmq
       - qcon-postgres
 
   qcon-auth:
@@ -32,7 +33,7 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
+      # - qcon-postgres
       - qcon-api-gateway
 
   qcon-user:
@@ -58,8 +59,8 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
-      - qcon-api-gateway
+      # - qcon-postgres
+      # - qcon-api-gateway
       - qcon-auth
 
   qcon-academic:
@@ -75,8 +76,8 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
-      - qcon-api-gateway
+      # - qcon-postgres
+      # - qcon-api-gateway
       - qcon-auth
   
   qcon-exam:
@@ -107,8 +108,8 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
-      - qcon-api-gateway
+      # - qcon-postgres
+      # - qcon-api-gateway
       - qcon-auth
 
   qcon-result:
@@ -124,8 +125,8 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
-      - qcon-api-gateway
+      # - qcon-postgres
+      # - qcon-api-gateway
       - qcon-auth
 
   qcon-postgres:
