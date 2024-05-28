@@ -76,3 +76,5 @@ const serviceName = process.env.SERVICE_NAME || 'ACADEMIC-Service';
 
 
 app.listen(port, ()=>{console.log(`${serviceName} Server is running on port: ${port}`)})
+
+module.exports = app
