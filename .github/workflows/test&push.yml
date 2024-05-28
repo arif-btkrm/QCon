@@ -48,7 +48,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: ./api-gateway
-        file: Dockerfile
+        file: ./api-gateway/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
 
