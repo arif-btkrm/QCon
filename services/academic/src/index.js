@@ -17,7 +17,7 @@ app.use(morgan('dev'));
 
 //routes
 app.get('/', (req,res)=>{
-    console.log(setupDatabase)
+    // console.log(setupDatabase)
     try{
         res.status(200).send({message: "Hello from Academic-Service"})
     }catch(err){
@@ -28,7 +28,7 @@ app.get('/', (req,res)=>{
 
 //routes
 app.get('/health', (req,res)=>{
-    console.log(setupDatabase)
+    // console.log(setupDatabase)
     try{
         res.status(200).send({message: "Hello from Academic-Service and Health Ok"})
     }catch(err){
