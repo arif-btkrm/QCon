@@ -39,7 +39,7 @@ configureRoutes(app);
 
 // health check
 app.get('/health', (_req, res) => {
-	res.status(200).json({ message: 'API Gateway is running and Health OK' });
+	res.status(201).json({ message: 'API Gateway is running and Health OK' });
 });
 
 // health check
