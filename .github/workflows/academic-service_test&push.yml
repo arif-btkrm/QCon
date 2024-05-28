@@ -19,7 +19,7 @@ jobs:
           node-version: '18'
       - name: Install dependencies
         run: |
-          cd services/academic  
+          cd services/academic
           npm i --frozen-lockfile
       - name: Run Tests
         run: |
@@ -52,5 +52,3 @@ jobs:
         file: ./services/academic/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
-
-
