@@ -1,4 +1,4 @@
-name : Academic Tets & Push Automation
+name : Academic Test & Push Automation
 
 on:
   push:

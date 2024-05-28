@@ -1,4 +1,4 @@
-name : User Tets & Push Automation
+name : User Test & Push Automation
 
 on:
   push:

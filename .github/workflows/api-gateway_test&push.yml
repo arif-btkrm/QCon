@@ -1,4 +1,4 @@
-name : QCon Tets & Push Automation
+name : Api-Gateway Test & Push Automation
 
 on:
   push:

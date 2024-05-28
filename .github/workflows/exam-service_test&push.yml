@@ -1,4 +1,4 @@
-name : Exam Service Tets & Push Automation
+name : Exam Service Test & Push Automation
 
 on:
   push:

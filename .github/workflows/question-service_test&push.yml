@@ -1,4 +1,4 @@
-name : Question Tets & Push Automation
+name : Question Test & Push Automation
 
 on:
   push:

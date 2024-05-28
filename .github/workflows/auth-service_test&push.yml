@@ -1,4 +1,4 @@
-name : QCon Tets & Push Automation
+name : Auth-Service Test & Push Automation
 
 on:
   push:

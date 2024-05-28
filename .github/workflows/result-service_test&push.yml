@@ -1,4 +1,4 @@
-name : Result Tets & Push Automation
+name : Result Test & Push Automation
 
 on:
   push:
