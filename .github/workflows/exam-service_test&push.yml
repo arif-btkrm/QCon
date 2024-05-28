@@ -19,7 +19,7 @@ jobs:
           node-version: '18'
       - name: Install dependencies
         run: |
-          cd services/exam  
+          cd services/exam
           npm i --frozen-lockfile
       - name: Run Tests
         run: |
