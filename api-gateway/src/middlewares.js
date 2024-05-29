@@ -57,6 +57,17 @@ const isAdmin = (req, res, next)=>{
 	}
 }
 
+const isStudent = (req, res, next)=>{
+	const role  = req.headers['x-user-role']
+	if(role == "Student"){
+		next()
+	}
+	else{
+		console.log(`role From req.headers ${role}`)
+		return res.status(401).json({ message: 'Unauthorized Access' });
+	}
+}
+
 const Setup = (req, res, next)=>{
 	console.log(`Hello from Setup Route`)
 	// Need to Apply RabbitMQ Here for synchronus Communications such as to hit /setup of every services
@@ -73,5 +84,5 @@ const Setup = (req, res, next)=>{
 	// }
 }
 
-const middlewares = { auth, isAdmin, isTeacher, Setup };
+const middlewares = { auth, isAdmin, isTeacher, isStudent,Setup };
 module.exports = middlewares;

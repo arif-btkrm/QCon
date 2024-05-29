@@ -2,11 +2,12 @@ const pool = require('./../db/db')
 const {redis} = require('./../redis/redis')
 
 const addExam = async (req,res)=>{
-    const {name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,createdBy} = req.body
+    const createdBy  = req.headers['x-user-id']
+    const {name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,classId,courseId} = req.body
     console.log(req.body);
     
     try{
-        await pool.query('INSERT INTO exam (Name, time, durationMunite, totalMarks, passMarks, nagetiveMarks, questionIds, classId,courseId, createdBy) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,createdBy] )
+        await pool.query('INSERT INTO exam (Name, time, durationMunite, totalMarks, passMarks, nagetiveMarks, questionIds, classId,courseId, createdBy) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)', [name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,classId,courseId,createdBy] )
         res.status(201).send( {message: ` create Exam Successful`})
 
     }catch(err){
@@ -16,17 +17,30 @@ const addExam = async (req,res)=>{
 };
 
 const addSubmit = async (req,res)=>{
-    // const {name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,createdBy} = req.body
-    // console.log(req.body);
+     const {userId, examId, submitTime, answers} = req.body
+    console.log(req.body);
     
-    // try{
-    //     await pool.query('INSERT INTO exam (Name, time, durationMunite, totalMarks, passMarks, nagetiveMarks, questionIds, classId,courseId, createdBy) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [name, time, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,createdBy] )
-    //     res.status(201).send( {message: ` create Exam Successful`})
+    try{
+        await pool.query('INSERT INTO submit ( userId, examId, submitTime, answers) VALUES ($1, $2, $3, $4)', [userId, examId, submitTime, answers] )
+        res.status(201).send( {message: ` Submission Successful`})
 
-    // }catch(err){
-    //     console.log(err)
-    //     res.sendStatus(500)
-    // }   
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }   
+};
+const addSubmitByMessage = async (data)=>{
+    const {userId, examId, submitTime, answers} = data
+   console.log(answers);
+   
+   try{
+       await pool.query('INSERT INTO submit ( userId, examId, submitTime, answers) VALUES ($1, $2, $3, $4)', [userId, examId, submitTime, answers] )
+    //    res.status(201).send( {message: ` Submission Successful`})
+
+   }catch(err){
+       console.log(err)
+    //    res.sendStatus(500)
+   }   
 };
 
 const getExams = async (req,res)=>{
@@ -60,4 +74,4 @@ const getExamById = async (req,res)=>{
 
 
 
-module.exports = {addExam,getExams,getExamById,addSubmit};
+module.exports = {addExam,getExams,getExamById,addSubmit,addSubmitByMessage};

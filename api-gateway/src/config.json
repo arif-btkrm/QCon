@@ -184,7 +184,7 @@
           ]
         },
         {
-          "path": "/exam/submit",
+          "path": "/exam/submit/:id",
           "methods": [
             "post"
           ],

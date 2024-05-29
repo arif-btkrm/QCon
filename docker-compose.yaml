@@ -12,6 +12,8 @@ services:
     # environment:
     #   - SERVICE_NAME = "API-Gateway" 
     #   - PORT = 3000
+    environment:
+      - TZ=Asia/Dhaka
     volumes:
       - ./api-gateway:/app
     networks:
@@ -62,6 +64,7 @@ services:
       # - qcon-postgres
       # - qcon-api-gateway
       - qcon-auth
+    restart: on-failure
 
   qcon-academic:
     build:
@@ -79,6 +82,7 @@ services:
       # - qcon-postgres
       # - qcon-api-gateway
       - qcon-auth
+    restart: on-failure:10
   
   qcon-exam:
     build:
@@ -93,7 +97,9 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
+      # - qcon-postgres
+      - qcon-auth
+    restart: on-failure:10
 
   qcon-question:
     build:
@@ -111,6 +117,7 @@ services:
       # - qcon-postgres
       # - qcon-api-gateway
       - qcon-auth
+    restart: on-failure:10
 
   qcon-result:
     build:
@@ -128,6 +135,7 @@ services:
       # - qcon-postgres
       # - qcon-api-gateway
       - qcon-auth
+    restart: on-failure:10
 
   qcon-postgres:
     image: postgres:13

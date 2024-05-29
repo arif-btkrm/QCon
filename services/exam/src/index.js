@@ -53,7 +53,7 @@ app.get('/setup', async (req,res)=>{
 // routes
 
 app.post('/exam', addExam)
-app.post('/exam/submit', addSubmit)
+app.post('/exam/submit/:id', addSubmit)
 app.get('/exams', getExams)
 app.get('/exams/:id', cached, getExamById)
 

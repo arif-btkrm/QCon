@@ -11,4 +11,6 @@ EXPOSE 3002
 
 COPY . .
 
+ENV TZ "Asia/Dhaka"
+
 CMD ["npm","run","dev"]

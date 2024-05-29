@@ -56,6 +56,10 @@ app.get('/setup', async (req,res)=>{
 // app.get('/questions/:id', getQuestionById)
 // app.post('/questions', getQuestionsByIds)
 
+// submitTime.toLocaleTimeString('en-US', {  // Need to work with time to adjust timezone
+//     timeZone: process.env.TZ
+//   })
+
 // 404 handler
 app.use((_req, res) => {
 	res.status(404).json({ message: 'Not found' });

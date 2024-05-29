@@ -94,7 +94,7 @@ const seedTable = async ()=>{
     console.log(`Data From table ${TableName2} : ${data2}`);
 
     if(data2.rowCount == 0){
-        const InsertQuery2 = `INSERT INTO ${TableName2}(Name, email, password, roleid) VALUES ('Mr. SuperAdmin','superadmin@qcon.com','superadmin',1),('Mr. Admin','admin@qcon.com','admin',2)`
+        const InsertQuery2 = `INSERT INTO ${TableName2}(Name, email, password, roleid) VALUES ('Mr. SuperAdmin','superadmin@qcon.com','superadmin',1),('Mr. Admin','admin@qcon.com','admin',2),('Mr. Teacher','teacher@qcon.com','teacher',3),('Mr. Student','student@qcon.com','student',4)`
         await tb_client.query(`${InsertQuery2}`);
         console.log(`Seeded table ${TableName2}.`);
     }

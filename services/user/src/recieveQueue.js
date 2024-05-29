@@ -1,4 +1,5 @@
 const amqp = require('amqplib')
+const {setupDatabase} = require('./db/setup')
 
 const QUEUE_URL = 'amqp://host.docker.internal'
 
@@ -19,6 +20,12 @@ const recieveFromQueue = async (queue, callback)=>{
     }, {noAck : true})
 }
 
-recieveFromQueue('setup', (msg)=>{
+
+recieveFromQueue('setup', async (msg)=>{
     console.log(`Recieved Setup Msg : ${msg}`)
+    try{
+        await setupDatabase()
+    }catch(err){
+        console.log(err)
+    }
 })

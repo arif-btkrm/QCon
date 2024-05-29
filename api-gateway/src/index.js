@@ -4,7 +4,7 @@ const dotenv =  require('dotenv');
 const helmet =  require('helmet');
 const rateLimit =  require('express-rate-limit');
 const morgan =  require('morgan');
-
+const {auth}  = require('./middlewares')
 const { configureRoutes } = require('./utils')
 
 const {sendToQueue,sendToAll} = require('./queue')
@@ -32,8 +32,6 @@ app.use('/api', limiter);
 app.use(morgan('dev'));
 app.use(express.json());
 
-// TODO: Auth middleware
-
 // routes
 configureRoutes(app);
 
@@ -47,6 +45,23 @@ app.get('/admin/setup', (_req, res) => {
 	sendToAll('run service setup')
 	res.json({ message: 'Hello from /setup Route' });
 });
+
+// Submit Part
+
+
+app.post('/api/exam/submit', auth ,(req, res) => {
+	userId = req.headers['x-user-id']
+	const {examId,answers} = req.body
+	const now = new Date()
+	const submitTime = now
+	const data = {userId,examId,answers,submitTime}
+	sendToQueue('submit',JSON.stringify(data))
+	res.status(201).json({ message:  "Submission Successful" });
+});
+
+
+
+
 
 // 404 handler
 app.use((_req, res) => {
