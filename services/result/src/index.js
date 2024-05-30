@@ -4,7 +4,7 @@ const cors  = require('cors');
 const morgan  = require('morgan');
 
 const {setupDatabase} = require('./db/setup')
-const {getQuestion,addQuestion,getQuestionById,getQuestionsByIds} = require('./controllers/resultController')
+const {makeResultByExamId,getResultByExamId,getMyResult} = require('./controllers/resultController')
 
 require('./recieveQueue')
 
@@ -51,14 +51,10 @@ app.get('/setup', async (req,res)=>{
 // routes
 
 
-// app.post('/question', addQuestion)
-// app.get('/questions', getQuestion)
-// app.get('/questions/:id', getQuestionById)
-// app.post('/questions', getQuestionsByIds)
+app.post('/result', makeResultByExamId) // auth,isTeacher
+app.get('/result/:examId', getResultByExamId) // auth 
+app.get('/result/:examId', getMyResult) // auth getMyResult
 
-// submitTime.toLocaleTimeString('en-US', {  // Need to work with time to adjust timezone
-//     timeZone: process.env.TZ
-//   })
 
 // 404 handler
 app.use((_req, res) => {

@@ -16,8 +16,10 @@ const addExam = async (req,res)=>{
     }   
 };
 
-const addSubmit = async (req,res)=>{
-     const {userId, examId, submitTime, answers} = req.body
+const addSubmit = async (req,res)=>{ // need to do later
+     const {examId, answers} = req.body
+     const userId = 4
+     const submitTime = new Date();
     console.log(req.body);
     
     try{
@@ -72,6 +74,17 @@ const getExamById = async (req,res)=>{
     }   
 };
 
+const getSubmitsByExamId = async (req,res)=>{
+    const { examid } = req.params
+    // console.log(id)
+    try{
+        let data = await pool.query(`SELECT * FROM submit WHERE examid = '${examid}'`)
+        res.status(200).json(data.rows)
 
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }   
+};
 
-module.exports = {addExam,getExams,getExamById,addSubmit,addSubmitByMessage};
+module.exports = {addExam,getExams,getExamById,addSubmit,getSubmitsByExamId,addSubmitByMessage};

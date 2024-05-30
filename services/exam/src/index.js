@@ -4,7 +4,7 @@ const cors  = require('cors');
 const morgan  = require('morgan');
 
 const {setupDatabase} = require('./db/setup')
-const {addExam,getExams,getExamById,addSubmit} = require('./controllers/examController')
+const {addExam,getExams,getExamById,addSubmit,getSubmitsByExamId} = require('./controllers/examController')
 
 const {cached} = require('./redis/midlewares');
 
@@ -53,9 +53,11 @@ app.get('/setup', async (req,res)=>{
 // routes
 
 app.post('/exam', addExam)
-app.post('/exam/submit/:id', addSubmit)
 app.get('/exams', getExams)
 app.get('/exams/:id', cached, getExamById)
+app.post('/exam/submit', addSubmit)
+app.get('/submits/:examid', getSubmitsByExamId)
+
 
 // 404 handler
 app.use((_req, res) => {

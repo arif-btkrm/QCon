@@ -157,7 +157,7 @@
       "url": "http://host.docker.internal:4004",
       "routes": [
         {
-          "path": "/exams",
+          "path": "/exam",
           "methods": [
             "post"
           ],
@@ -171,7 +171,7 @@
             "get"
           ],
           "middlewares": [
-
+              
           ]
         },
         {
@@ -180,11 +180,11 @@
             "get"
           ],
           "middlewares": [
-        
+            
           ]
         },
         {
-          "path": "/exam/submit/:id",
+          "path": "/exam/submit",
           "methods": [
             "post"
           ],

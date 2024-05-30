@@ -49,14 +49,18 @@ app.get('/admin/setup', (_req, res) => {
 // Submit Part
 
 
-app.post('/api/exam/submit', auth ,(req, res) => {
+app.post('/api/exam/submit', auth ,(req, res) => { // will do later
 	userId = req.headers['x-user-id']
 	const {examId,answers} = req.body
 	const now = new Date()
-	const submitTime = now
-	const data = {userId,examId,answers,submitTime}
-	sendToQueue('submit',JSON.stringify(data))
-	res.status(201).json({ message:  "Submission Successful" });
+	// let submitTime = now.toISOString() //+ (1000*1*60*60*6) // Adding 6 hour for timezone adjustment
+	// submitTime = new Date().getTime()
+	// const data = {userId,examId,answers,submitTime}
+	// sendToQueue('submit',JSON.stringify(data))
+	// console.log(`now : ${now}`)
+	// console.log(`now : ${submitTime}`)
+
+	res.status(201).json({ message:  `Submission Successful at : ${now}` });
 });
 
 

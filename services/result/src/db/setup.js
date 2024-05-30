@@ -49,55 +49,11 @@ const createTable = async ()=>{
 
 
     // Creating Table 1
-    const TableName1 = 'question'
-    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, question VARCHAR(255) NOT NULL, option1 VARCHAR(255) NOT NULL, option2 VARCHAR(255) NOT NULL, option3 VARCHAR(255) NOT NULL,option4 VARCHAR(255) NOT NULL, ans int NOT NULL, classId int, courseId int)`
+    const TableName1 = 'result'
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, rank int NOT NULL, user_Id int NOT NULL UNIQUE, exam_Id int NOT NULL, submition text not NULL, correct_Ans int NOT NULL, wrong_Ans NOT NULL, masks float NOT NULL, status VARCHAR(20) NOT NULL)`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}.`);
        
-    await tb_client.end();
-}
-
-const seedTable = async ()=>{
-    const tb_client = new Client({
-        host: DB_HOST,
-        user: DB_USER,
-        password: DB_PASSWORD,
-        port: DB_PORT,
-        database : process.env.DB_NAME,
-    });
-    await tb_client.connect();
-
-    
-    // Seeding Table 1
-    const TableName1 = 'question'
-    const SelectQuery1 = `SELECT * FROM ${TableName1} `
-    const data1 = await tb_client.query(`${SelectQuery1}`);
-    console.log(`Data From table ${TableName1} :  ${data1}`);
-
-    
-    if(data1.rowCount == 0){
-        const InsertQuery1 = `INSERT INTO ${TableName1} 
-        (question, option1, option2, option3, option4, ans, classId, courseId) VALUES 
-        ('National Bird of Bangladesh?','Corw','Moyna','Choroi','Doyel',4,10,1),
-        ('বাংলাদেশের জাতীয় ফুল?','গোলাপ', 'জবা', 'শাপলা', 'জুই',3,10,1),
-        ('Independent day of Banladesh','14 FEB', '26 MAR', '26 DEC', '14 APR',2,10,1),
-        ('Which one is liquid','Milk', 'Cotton', 'Rice', 'Chair',1,10,1),
-        ('2+5=?','25', '52', '10', '7',4,10,1),
-        ('১ লা বৈশাখ কোন মাসে হয়?','আষাঢ়', 'বৈশাখ', 'ভাদ্র', 'মাঘ',2,10,1),
-        ('ফলের রাজা-','জাম', 'লিচু', 'কলা', 'আম',4,10,1),
-        ('The number of Vouel is - ','5', '6', '7', '8',1,10,1),
-        ('কখন রাত হয়?','সকালে', 'রাতে', 'বিকেলে', 'দুপুরে',2,10,1),
-        ('কোনটি সঠিক উত্তর','ভুল উত্তর', 'জানিনা', 'সঠিক উত্তর', 'কোনটি না',3,10,1),
-        ('Color of hair is','White', 'Blue', 'Black', 'Red',2,10,1),
-        ('Prime number is - ','2', '4', '6', '8',1,10,1)
-        `
-        await tb_client.query(`${InsertQuery1}`);
-        console.log(`Seeded table ${TableName1}`);
-    }
-    else{
-        console.log(`Already Seeded table ${TableName1}`);
-    }
-
     await tb_client.end();
 }
 
@@ -105,7 +61,6 @@ const setupDatabase = async ()=>{
     
     await createDatabase()
     await createTable()
-    await seedTable()
 
 }
 

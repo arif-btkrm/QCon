@@ -50,13 +50,13 @@ const createTable = async ()=>{
 
     // Creating Table 1
     const TableName1 = 'exam'
-    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, Name VARCHAR(255) NOT NULL, time timestamp NOT NULL, durationMunite int NOT NULL, totalMarks int NOT NULL, passMarks int NOT NULL, nagetiveMarks float DEFAULT 0, questionIds text NOT NULL, classId VARCHAR(255) DEFAULT 0, courseId VARCHAR(255) DEFAULT 0, createdBy int NOT NULL)`
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, Name VARCHAR(255) NOT NULL, time timestamptz NOT NULL, durationMunite int NOT NULL, totalMarks int NOT NULL, passMarks int NOT NULL, nagetiveMarks float DEFAULT 0, questionIds text NOT NULL, classId int DEFAULT 0, courseId int DEFAULT 0, createdBy int NOT NULL)`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}.`);
        
     // Creating Table 2
     const TableName2 = 'submit'
-    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, userId int NOT NULL, examId int REFERENCES exam(id) NOT NULL, submitTime timestamp NOT NULL, answers text NOT NULL)`
+    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, userId int NOT NULL UNIQUE, examId int REFERENCES exam(id) NOT NULL, submitTime timestamptz NOT NULL, answers text NOT NULL)`
     await pool.query(`${CreateTableQuery2}`);
     console.log(`created table ${TableName2}`);
 
