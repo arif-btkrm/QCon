@@ -49,14 +49,14 @@ const createTable = async ()=>{
 
     // Creating Table
     const TableName1 = 'role'
-    const SQLQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY, roleName VARCHAR(20))`
-    await tb_client.query(`${SQLQuery1}`);
-    console.log(`created table ${TableName1}.`);
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY, roleName VARCHAR(20))`
+    await tb_client.query(`${CreateTableQuery1}`);
+    console.log(`created table ${TableName1}`);
        
     // Creating Table
     const TableName2 = 'users'
-    const SQLQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, Name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL,  roleId int REFERENCES role (id) DEFAULT 4)`
-    await pool.query(`${SQLQuery2}`);
+    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, Name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL,  roleId int REFERENCES role (id) DEFAULT 4)`
+    await pool.query(`${CreateTableQuery2}`);
     console.log(`created table ${TableName2}`);
 
     await tb_client.end();

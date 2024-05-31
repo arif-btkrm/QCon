@@ -1,10 +1,6 @@
 const pool = require('../db/db')
-const axios = require('axios')
 
-const { QUESTION_SERVICE,EXAM_SERVICE } = require('../config');
-const { json } = require('express');
-
-const {getExam,getQuestions,getSubmissions,calculateResult} = require('./utils')
+const {getExam,getQuestions,getSubmissions,calculateResult,objToValueString} = require('./utils')
 
 // submitTime.toLocaleTimeString('en-US', {  // Need to work with time to adjust timezone
 //     timeZone: process.env.TZ
@@ -33,14 +29,21 @@ const makeResultByExamId = async (req,res)=>{
     const submissions = await getSubmissions(examId)
     const results =  await calculateResult(examdetails,questions,submissions)
     
-    // Push to Database
-
-
     // console.log(examdetails)
     // // console.log(qids)
     // console.log(questions)
     // console.log(submitions)
 
+    const sqlValues = objToValueString(results)
+    // console.log(sqlValues)
+    try{
+        await pool.query(`INSERT INTO result (exam_id, rank, user_id, submit_time, marks, correct_ans, wrong_ans, status, submission) VALUES ${sqlValues.join(', ')}`)
+        res.status(201).json({Message : "Success"})
+
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }
 
       
 };
