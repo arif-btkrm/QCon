@@ -50,7 +50,7 @@ const createTable = async ()=>{
 
     // Creating Table 1
     const TableName1 = 'result'
-    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, rank int NOT NULL, user_Id int NOT NULL UNIQUE, exam_Id int NOT NULL, submition text not NULL, correct_Ans int NOT NULL, wrong_Ans NOT NULL, masks float NOT NULL, status VARCHAR(20) NOT NULL)`
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, rank int NOT NULL, user_Id int NOT NULL UNIQUE, exam_Id int NOT NULL, submission text not NULL, correct_Ans int NOT NULL, wrong_Ans NOT NULL, masks float NOT NULL, status VARCHAR(20) NOT NULL)`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}.`);
        
