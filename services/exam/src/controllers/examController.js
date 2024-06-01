@@ -19,6 +19,7 @@ const addExam = async (req,res)=>{
 };
 
 const addSubmit = async (req,res)=>{ // need to do later
+    // const user_id  = req.headers['x-user-id']
     const {examId, userId, answers} = req.body
     const submitTime = new Date();
     console.log(req.body);
@@ -32,7 +33,7 @@ const addSubmit = async (req,res)=>{ // need to do later
         res.sendStatus(500)
     }   
 };
-const addSubmitByMessage = async (data)=>{
+const addSubmitByMessage = async (data)=>{ // Need to implement Later
     const { examId, userId, submitTime, answers} = data
    console.log(answers);
    

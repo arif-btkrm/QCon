@@ -9,9 +9,6 @@ const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
 const DB_PORT = process.env.DB_PORT || 'root';
 
-// const isDev = process.env.NODE_ENV === 'development';
-
-//    if (!isDev) return console.log('in production environment - skipping database creation.');
 
 const createDatabase = async ()=> {
     
