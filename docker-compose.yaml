@@ -1,10 +1,11 @@
 version: '3.8'
 
 services:
-  qcon-api-gateway:
+  api-gateway:
     build:
       context : ./api-gateway
       dockerfile: Dockerfile
+    image: QCon/api-gateway:v1
     ports:
       - '4000:3000'
     env_file:
@@ -19,13 +20,14 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-rabbitmq
-      - qcon-postgres
+      - rabbitmq
+      - postgres
 
-  qcon-auth:
+  auth:
     build:
       context : ./services/auth
       dockerfile: Dockerfile
+    image: QCon/auth:v1
     ports:
       - '4001:3001'
     env_file:
@@ -37,13 +39,14 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      # - qcon-postgres
-      - qcon-api-gateway
+      # - postgres
+      - api-gateway
 
-  qcon-user:
+  user:
     build:
       context : ./services/user
       dockerfile: Dockerfile
+    image: QCon/user:v1
     ports:
       - '4002:3002'
     env_file:
@@ -65,15 +68,16 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      # - qcon-postgres
-      # - qcon-api-gateway
-      - qcon-auth
+      # - postgres
+      # - api-gateway
+      - auth
     restart: on-failure
 
-  qcon-academic:
+  academic:
     build:
       context : ./services/academic
       dockerfile: Dockerfile
+    image: QCon/academic:v1  
     ports:
       - '4003:3003'
     env_file:
@@ -85,15 +89,16 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      # - qcon-postgres
-      # - qcon-api-gateway
-      - qcon-auth
+      # - postgres
+      # - api-gateway
+      - auth
     restart: on-failure:10
   
-  qcon-exam:
+  exam:
     build:
       context : ./services/exam
       dockerfile: Dockerfile
+    image: QCon/exam:v1
     ports:
       - '4004:3004'
     env_file:
@@ -105,14 +110,15 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      # - qcon-postgres
-      - qcon-auth
+      # - postgres
+      - auth
     restart: on-failure:10
 
-  qcon-question:
+  question:
     build:
       context : ./services/question
       dockerfile: Dockerfile
+    image: QCon/question:v1
     ports:
       - '4005:3005'
     env_file:
@@ -124,15 +130,16 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      # - qcon-postgres
-      # - qcon-api-gateway
-      - qcon-auth
+      # - postgres
+      # - api-gateway
+      - auth
     restart: on-failure:10
 
-  qcon-result:
+  result:
     build:
       context : ./services/result
       dockerfile: Dockerfile
+    image: QCon/result:v1
     ports:
       - '4006:3006'
     env_file:
@@ -144,12 +151,12 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      # - qcon-postgres
-      # - qcon-api-gateway
-      - qcon-auth
+      # - postgres
+      # - api-gateway
+      - auth
     restart: on-failure:10
 
-  qcon-postgres:
+  postgres:
     image: postgres:13
     container_name: qcon_postgres
     restart: on-failure
@@ -171,13 +178,14 @@ services:
       timeout: 30s
       retries: 3
 
-  qcon-pgadmin:
+  pgadmin:
     image: dpage/pgadmin4
     container_name: qcon_pgadmin
     restart: on-failure
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@qcon.com
       PGADMIN_DEFAULT_PASSWORD: admin
+      TZ: Asia/Dhaka
     ports:
       - '5050:80'
       - '5051:443'
@@ -186,9 +194,9 @@ services:
     networks:
       - qconNetwork
     depends_on:
-      - qcon-postgres
+      - postgres
 
-  qcon-redis-stack:
+  redis-stack:
     image: redis/redis-stack:latest
     ports:
       - '6379:6379'
@@ -197,10 +205,11 @@ services:
       - qcon-redis-data:/var/lib/redis-stack
     environment:
       - REDIS_ARGS=--save 900 1
+      - TZ=Asia/Dhaka
     networks:
       - qconNetwork
 
-  qcon-rabbitmq:
+  rabbitmq:
     image: rabbitmq:3.8-management
     ports:
       - '5672:5672'

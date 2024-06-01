@@ -9,13 +9,9 @@ const getExam = async (examId)=>{
         await axios.get(`${EXAM_SERVICE}/exams/${examId}`)
           .then(function (response) {
            exam = response.data
-            // console.log(exam)
-            // res.status(response.status).send(response.data);
         })
         .catch(function (error) {
             console.log(error);
-            // res.status(error.response.status).send(error.response.data);
-            
         });
     }catch(err){
         console.log(err)
@@ -27,20 +23,15 @@ const getExam = async (examId)=>{
 const getQuestions = async (qids)=>{
     let questions
     try{
-        await axios.post(`${QUESTION_SERVICE}/questions`,{ids:qids})
+        await axios.post(`${QUESTION_SERVICE}/questions-ans`,{ids:qids})
           .then(function (response) {
             questions = response.data
-            // console.log(questions)
-            // res.status(response.status).send(response.data);
         })
         .catch(function (error) {
-            console.log(error);
-            // res.status(error.response.status).send(error.response.data);
-            
+            console.log(error);            
         });
     }catch(err){
         console.log(err)
-        // res.sendStatus(500)
     }
     return questions
 }
@@ -51,8 +42,7 @@ const getSubmissions = async (examid)=>{
         await axios.get(`${EXAM_SERVICE}/submits/${examid}`,)
           .then(function (response) {
             submissions = response.data
-            // console.log(submissions)
-            // res.status(response.status).send(response.data);
+            
         })
         .catch(function (error) {
             console.log(error);
@@ -102,13 +92,13 @@ const calculateResult = async(examdetails,questions,submissions)=>{
         }
         const result = { "exam_id": examid,"rank": 0,"user_id": userId, "submit_time": subTime, "marks": Marks, "correct_ans": correctAns, "wrong_ans": wrongAns, "status": Status, "submission": sohwAns} // Can include Submission time
         finalResults.push(result)
-        // console.log(`Question ans :  ${question.ans}`)
-        // console.log(`Submited Answer : ${answers[id]}`)
     });
+
     finalResults.sort((a,b) => a.submit_time - b.submit_time) // Sorted By submit_time
     finalResults.sort((a,b) => b.marks - a.marks) // Sorted By marks
     finalResults = addRank(finalResults) // included Rank Number
     console.log(finalResults)
+    
     return finalResults
 }
 

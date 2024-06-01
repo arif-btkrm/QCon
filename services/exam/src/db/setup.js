@@ -9,9 +9,6 @@ const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
 const DB_PORT = process.env.DB_PORT || 'root';
 
-// const isDev = process.env.NODE_ENV === 'development';
-
-//    if (!isDev) return console.log('in production environment - skipping database creation.');
 
 const createDatabase = async ()=> {
     
@@ -50,61 +47,15 @@ const createTable = async ()=>{
 
     // Creating Table 1
     const TableName1 = 'exam'
-    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, Name VARCHAR(255) NOT NULL, time timestamptz NOT NULL, durationMunite int NOT NULL, totalMarks int NOT NULL, passMarks int NOT NULL, nagetiveMarks float DEFAULT 0, questionIds text NOT NULL, classId int DEFAULT 0, courseId int DEFAULT 0, createdBy int NOT NULL)`
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, Name VARCHAR(255) NOT NULL, time timestamptz NOT NULL, duration_munite int NOT NULL, total_marks int NOT NULL, pass_marks int NOT NULL, negative_marks float DEFAULT 0, questions text NOT NULL, class_id int DEFAULT 0, course_id int DEFAULT 0, added_by int NOT NULL)`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}.`);
        
     // Creating Table 2
     const TableName2 = 'submit'
-    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, userId int NOT NULL UNIQUE, examId int REFERENCES exam(id) NOT NULL, submitTime timestamptz NOT NULL, answers text NOT NULL)`
+    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, exam_id int REFERENCES exam(id) NOT NULL, user_id int NOT NULL UNIQUE, submit_time timestamptz NOT NULL, answers text NOT NULL)`
     await pool.query(`${CreateTableQuery2}`);
     console.log(`created table ${TableName2}`);
-
-    await tb_client.end();
-}
-
-const seedTable = async ()=>{
-    const tb_client = new Client({
-        host: DB_HOST,
-        user: DB_USER,
-        password: DB_PASSWORD,
-        port: DB_PORT,
-        database : process.env.DB_NAME,
-    });
-    await tb_client.connect();
-
-    
-    // Seeding Table 1
-    const TableName1 = 'class'
-    const SelectQuery1 = `SELECT * FROM ${TableName1} `
-    const data1 = await tb_client.query(`${SelectQuery1}`);
-    console.log(`Data From table ${TableName1} :  ${data1}`);
-
-    
-    if(data1.rowCount == 0){
-        const InsertQuery1 = `INSERT INTO ${TableName1} (className) VALUES ('One'),('Two'),('Three'),('Four'),('Five'),('Six'),('Seven'),('Eight'),('Nine'),('Ten')`
-        await tb_client.query(`${InsertQuery1}`);
-        console.log(`Seeded table ${TableName1}`);
-    }
-    else{
-        console.log(`Already Seeded table ${TableName1}`);
-    }
-
-
-    // Seeding Table 2
-    const TableName2 = 'course'
-    const SelectQuery2 = `SELECT * FROM ${TableName2} `
-    const data2 = await tb_client.query(`${SelectQuery2}`);
-    console.log(`Data From table ${TableName2} :  ${data2}`);
-
-    if(data2.rowCount == 0){
-        const InsertQuery2 = `INSERT INTO ${TableName2} (courseName, classId) VALUES ('General Knowledge',10)`
-        await tb_client.query(`${InsertQuery2}`);
-        console.log(`Seeded table ${TableName2}.`);
-    }
-    else{
-        console.log(`Already Seeded table ${TableName2}.`);
-    }
 
     await tb_client.end();
 }

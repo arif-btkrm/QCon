@@ -9,7 +9,7 @@ const addQuestion = async (req,res)=>{
     // console.log(req.body);
     
     try{
-        await pool.query('INSERT INTO question (question, option1, option2, option3, option4, ans, classId, courseId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [question, option1, option2, option3, option4, ans, classId, courseId])
+        await pool.query('INSERT INTO question (question, option1, option2, option3, option4, correct_ans, class_id, course_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [question, option1, option2, option3, option4, ans, classId, courseId])
         res.status(201).send( {message: ` create Exam Successful`})
 
     }catch(err){
@@ -60,4 +60,32 @@ const getQuestionsByIds = async (req,res)=>{
     }   
 };
 
-module.exports = {getQuestion,addQuestion,getQuestionById,getQuestionsByIds};
+const getQuestionsAnsByIds = async (req,res)=>{
+    const { ids } = req.body
+    console.log(req)
+    try{
+        let data = await pool.query(`SELECT id,question,option1,option2,option3,option4,correct_ans FROM question WHERE id IN (${ids})`)
+        data = data.rows
+        res.status(200).json(data)
+
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }   
+}
+
+const getQuestionsOnlyByIds = async (req,res)=>{
+    const { ids } = req.body
+    console.log(req)
+    try{
+        let data = await pool.query(`SELECT  id,question,option1,option2,option3,option4 FROM question WHERE id IN (${ids})`)
+        data = data.rows
+        res.status(200).json(data)
+
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }   
+}
+
+module.exports = {getQuestion,addQuestion,getQuestionById,getQuestionsByIds,getQuestionsAnsByIds,getQuestionsOnlyByIds};

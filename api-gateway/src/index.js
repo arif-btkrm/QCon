@@ -57,7 +57,7 @@ app.post('/api/exam/submit', auth ,(req, res) => { // will do later
 	// submitTime = new Date().getTime()
 	// const data = {userId,examId,answers,submitTime}
 	// sendToQueue('submit',JSON.stringify(data))
-	// console.log(`now : ${now}`)
+	console.log(`now : ${now}`)
 	// console.log(`now : ${submitTime}`)
 
 	res.status(201).json({ message:  `Submission Successful at : ${now}` });

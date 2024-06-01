@@ -9,10 +9,6 @@ const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PASSWORD = process.env.DB_PASSWORD || 'root';
 const DB_PORT = process.env.DB_PORT || 'root';
 
-// const isDev = process.env.NODE_ENV === 'development';
-
-//    if (!isDev) return console.log('in production environment - skipping database creation.');
-
 const createDatabase = async ()=> {
     
     const db_client = new Client({
@@ -50,7 +46,7 @@ const createTable = async ()=>{
 
     // Creating Table 1
     const TableName1 = 'question'
-    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, question VARCHAR(255) NOT NULL, option1 VARCHAR(255) NOT NULL, option2 VARCHAR(255) NOT NULL, option3 VARCHAR(255) NOT NULL,option4 VARCHAR(255) NOT NULL, ans int NOT NULL, classId int, courseId int)`
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, question VARCHAR(255) NOT NULL, option1 VARCHAR(255) NOT NULL, option2 VARCHAR(255) NOT NULL, option3 VARCHAR(255) NOT NULL,option4 VARCHAR(255) NOT NULL, correct_ans int NOT NULL, class_id int, course_id int)`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}.`);
        
@@ -77,7 +73,7 @@ const seedTable = async ()=>{
     
     if(data1.rowCount == 0){
         const InsertQuery1 = `INSERT INTO ${TableName1} 
-        (question, option1, option2, option3, option4, ans, classId, courseId) VALUES 
+        (question, option1, option2, option3, option4, correct_ans, class_id, course_id) VALUES 
         ('National Bird of Bangladesh?','Corw','Moyna','Choroi','Doyel',4,10,1),
         ('বাংলাদেশের জাতীয় ফুল?','গোলাপ', 'জবা', 'শাপলা', 'জুই',3,10,1),
         ('Independent day of Banladesh','14 FEB', '26 MAR', '26 DEC', '14 APR',2,10,1),

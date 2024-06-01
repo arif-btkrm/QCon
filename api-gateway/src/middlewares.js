@@ -25,7 +25,7 @@ const auth = async (req, res, next) => {
 			req.headers['x-user-id'] = data.user.id;
 			req.headers['x-user-email'] = data.user.email;
 			req.headers['x-user-name'] = data.user.name;
-			req.headers['x-user-role'] = data.user.rolename;
+			req.headers['x-user-role'] = data.user.role_name;
 
 			next();
 		}

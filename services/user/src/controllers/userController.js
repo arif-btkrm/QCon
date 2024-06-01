@@ -39,7 +39,7 @@ const userProfileController = async (req,res)=>{
     const id  = req.headers['x-user-id']
     console.log(`Id From req.headers ${id}`)
     try{
-        const data = await pool.query(`SELECT users.name,users.email,role.rolename FROM users INNER JOIN role ON role.id = users.role WHERE users.id= '${id}' LIMIT 1`)
+        const data = await pool.query(`SELECT users.name,users.email,role.role_name FROM users INNER JOIN role ON role.id = users.role_id WHERE users.id= '${id}' LIMIT 1`)
         res.status(200).send(data.rows[0])
 
     }catch(err){
@@ -52,7 +52,7 @@ const userByIdController = async (req,res)=>{
     const { id } = req.params
     // console.log(id)
     try{
-        let data = await pool.query(`SELECT users.id,users.name,users.email,role.rolename FROM users INNER JOIN role ON role.id = users.roleId WHERE users.id= '${id}' LIMIT 1`)
+        let data = await pool.query(`SELECT users.id,users.name,users.email,role.role_name FROM users INNER JOIN role ON role.id = users.role_id WHERE users.id= '${id}' LIMIT 1`)
         data = data.rows[0]
         res.status(200).json(data)
 

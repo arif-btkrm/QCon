@@ -4,7 +4,7 @@ const cors  = require('cors');
 const morgan  = require('morgan');
 
 const {setupDatabase} = require('./db/setup')
-const {getQuestion,addQuestion,getQuestionById,getQuestionsByIds} = require('./controllers/questionController')
+const {getQuestion,addQuestion,getQuestionById,getQuestionsByIds,getQuestionsAnsByIds,getQuestionsOnlyByIds} = require('./controllers/questionController')
 
 require('./recieveQueue')
 
@@ -55,6 +55,10 @@ app.post('/question', addQuestion)
 app.get('/questions', getQuestion)
 app.get('/questions/:id', getQuestionById)
 app.post('/questions', getQuestionsByIds)
+app.post('/questions-only', getQuestionsOnlyByIds)
+app.post('/questions-ans', getQuestionsAnsByIds)
+
+
 
 // 404 handler
 app.use((_req, res) => {

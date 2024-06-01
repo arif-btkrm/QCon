@@ -3,13 +3,13 @@ const jwt = require ('jsonwebtoken')
 const axios = require('axios')
 
 const { USER_SERVICE } = require('./../config');
-const { json } = require('express');
+
 
 const signinController = async (req,res)=>{
     const {email,password} = req.body
     // console.log(email)
     try{
-        const data = await pool.query(`SELECT users.id,users.name,users.email,role.rolename FROM users INNER JOIN role ON role.id = users.roleid WHERE email= '${email}' AND password = '${password}' LIMIT 1`)
+        const data = await pool.query(`SELECT users.id,users.name,users.email,role.role_name FROM users INNER JOIN role ON role.id = users.role_id WHERE email= '${email}' AND password = '${password}' LIMIT 1`)
         // console.log(`Dataaaaa ${data.rowCount}`)
         if (data.rowCount == 0) {
             return	res.status(400).send({ message: 'Invalid credentials' });

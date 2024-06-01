@@ -49,13 +49,13 @@ const createTable = async ()=>{
 
     // Creating Table
     const TableName1 = 'role'
-    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY, roleName VARCHAR(20))`
+    const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY, role_name VARCHAR(20))`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}`);
        
     // Creating Table
     const TableName2 = 'users'
-    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, Name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL,  roleId int REFERENCES role (id) DEFAULT 4)`
+    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, Name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL UNIQUE, password VARCHAR(255) NOT NULL,  role_id int REFERENCES role (id) DEFAULT 4)`
     await pool.query(`${CreateTableQuery2}`);
     console.log(`created table ${TableName2}`);
 
@@ -79,7 +79,7 @@ const seedTable = async ()=>{
     console.log(`Data From table ${TableName1} : ${data1}`);
 
     if(data1.rowCount == 0){
-        const InsertQuery1 = `INSERT INTO ${TableName1}(roleName) VALUES ('SuperAdmin'),('Admin'),('Teacher'),('Student')`
+        const InsertQuery1 = `INSERT INTO ${TableName1}(role_name) VALUES ('SuperAdmin'),('Admin'),('Teacher'),('Student')`
         await tb_client.query(`${InsertQuery1}`);
         console.log(`Seeded table ${TableName1}.`);
     }
@@ -94,7 +94,7 @@ const seedTable = async ()=>{
     console.log(`Data From table ${TableName2} : ${data2}`);
 
     if(data2.rowCount == 0){
-        const InsertQuery2 = `INSERT INTO ${TableName2}(Name, email, password, roleid) VALUES ('Mr. SuperAdmin','superadmin@qcon.com','superadmin',1),('Mr. Admin','admin@qcon.com','admin',2),('Mr. Teacher','teacher@qcon.com','teacher',3),('Mr. Student','student@qcon.com','student',4)`
+        const InsertQuery2 = `INSERT INTO ${TableName2}(Name, email, password, role_id) VALUES ('Mr. SuperAdmin','superadmin@qcon.com','superadmin',1),('Mr. Admin','admin@qcon.com','admin',2),('Mr. Teacher','teacher@qcon.com','teacher',3),('Mr. Student','student@qcon.com','student',4)`
         await tb_client.query(`${InsertQuery2}`);
         console.log(`Seeded table ${TableName2}.`);
     }
