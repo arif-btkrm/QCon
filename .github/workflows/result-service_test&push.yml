@@ -44,7 +44,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: itsarif/qcon
+        images: itsarif/qcon-result
     - name: Build and Push
       uses: docker/build-push-action@v3
       with:
