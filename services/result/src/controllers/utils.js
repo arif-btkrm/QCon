@@ -68,7 +68,8 @@ const calculateResult = async(examdetails,questions,submissions)=>{
         const nagMark = examdetails.nagetivemarks
         userId = submit.userid
         examid = submit.examid
-        subTime = submit.submittime
+        duration = getDuration(submit.submittime, examdetails.time,examdetails.duration_munite) // miliSeconds
+        
         answers = JSON.parse(submit.answers)
         questions.forEach(question=>{
            const id = question.id
@@ -90,11 +91,11 @@ const calculateResult = async(examdetails,questions,submissions)=>{
         }else{
             Status = "Fail"
         }
-        const result = { "exam_id": examid,"rank": 0,"user_id": userId, "submit_time": subTime, "marks": Marks, "correct_ans": correctAns, "wrong_ans": wrongAns, "status": Status, "submission": sohwAns} // Can include Submission time
+        const result = { "exam_id": examid,"rank": 0,"user_id": userId, "duration": duration, "marks": Marks, "correct_ans": correctAns, "wrong_ans": wrongAns, "status": Status, "submission": sohwAns} // Can include Submission time
         finalResults.push(result)
     });
 
-    finalResults.sort((a,b) => a.submit_time - b.submit_time) // Sorted By submit_time
+    finalResults.sort((a,b) => a.duration - b.duration) // Sorted By duration in descending
     finalResults.sort((a,b) => b.marks - a.marks) // Sorted By marks
     finalResults = addRank(finalResults) // included Rank Number
     console.log(finalResults)
@@ -112,6 +113,25 @@ const addRank = (finalResults)=>{
 const objToValueString = (objs)=>{
     const sqlValues = objs.map(item => `(${item.exam_id}, '${item.rank}', '${item.user_id}','${item.submit_time}','${item.marks}','${item.correct_ans}','${item.wrong_ans}','${item.status}', '${item.submission}')`);
     return sqlValues
+}
+const getDuration = (submittime, time, maxDuration)=>{
+    duration = new Date(submittime) - new Date(time) // miliseconds
+    maxDuration = maxDuration*60*1000; // miliseconds
+    
+    duration = (duration<maxDuration)? duration : maxDuration
+    
+    const DurTime = new Date(duration);
+    
+    
+    const seconds = DurTime.getSeconds()
+    const munits = DurTime.getMinutes()
+
+    const secondsString = (seconds < 10)? `0${seconds}`: `${seconds}`
+    const munitsString = (munits < 10)? `0${munits}`: `${munits}`
+    
+    const durationString = `${munitsString} : ${secondsString}`  
+    
+    return durationString
 }
 
 module.exports = {getExam,getQuestions,getSubmissions,calculateResult,objToValueString}
