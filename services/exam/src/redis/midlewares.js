@@ -1,5 +1,6 @@
-const { json } = require('express')
-const {redis} = require('./../redis/redis')
+const {redis} = require('./redis')
+
+
 const cached = async (req,res,next)=>{
     const { id } = req.params
     // const cached = await redis.get(id)
