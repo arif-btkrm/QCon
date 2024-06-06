@@ -76,7 +76,7 @@ const getQuestionsAnsByIds = async (req,res)=>{
 
 const getQuestionsOnlyByIds = async (req,res)=>{
     const { ids } = req.body
-    console.log(req)
+    // console.log(req)
     try{
         let data = await pool.query(`SELECT  id,question,option1,option2,option3,option4 FROM question WHERE id IN (${ids})`)
         data = data.rows

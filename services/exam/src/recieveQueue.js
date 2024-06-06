@@ -51,5 +51,8 @@ const recieveSubmitFromQueue = async (queue, callback)=>{
 recieveSubmitFromQueue('submit', (msg)=>{
     const data = JSON.parse(msg)
     console.log(`Recieved Submit Msg : ${data}`)
+    // Do The corresponding Task
     addSubmitByMessage(data)
 })
+
+module.exports = {recieveSubmitFromQueue}

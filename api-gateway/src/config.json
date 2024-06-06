@@ -182,15 +182,6 @@
           "middlewares": [
             
           ]
-        },
-        {
-          "path": "/exam/submit",
-          "methods": [
-            "post"
-          ],
-          "middlewares": [
-            "auth"
-          ]
         }
       ]
     }

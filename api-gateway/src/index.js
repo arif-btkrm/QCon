@@ -4,10 +4,12 @@ const dotenv =  require('dotenv');
 const helmet =  require('helmet');
 const rateLimit =  require('express-rate-limit');
 const morgan =  require('morgan');
-const {auth}  = require('./middlewares')
+const {auth, isStudent}  = require('./middlewares')
 const { configureRoutes } = require('./utils')
 
 const {sendToQueue,sendToAll} = require('./queue')
+
+const {redis} = require('./redis/redis')
 
 dotenv.config();
 
@@ -49,18 +51,37 @@ app.get('/admin/setup', (_req, res) => {
 // Submit Part
 
 
-app.post('/api/exam/submit', auth ,(req, res) => { // will do later
+app.post('/api/exam/submit', auth, isStudent, async (req, res) => { // will do later
+	
 	userId = req.headers['x-user-id']
 	const {examId,answers} = req.body
-	const now = new Date()
-	// let submitTime = now.toISOString() //+ (1000*1*60*60*6) // Adding 6 hour for timezone adjustment
-	// submitTime = new Date().getTime()
-	// const data = {userId,examId,answers,submitTime}
-	// sendToQueue('submit',JSON.stringify(data))
-	console.log(`now : ${now}`)
-	// console.log(`now : ${submitTime}`)
+	// check contes is running or not
+    const running = await redis.exists(`running_contest_id:${examId}`)
+	if(running){
+		await redis.get(`running_contest_id:${examId}`).then((result) => {
+			if(result === 'running...'){
+				
+				const now = new Date()
+				const submitTime = now
 
-	res.status(201).json({ message:  `Submission Successful at : ${now}` });
+				// let submitTime = now.toISOString() 
+				//  submitTime = now.getTime()
+				 
+				const data = {examId,userId,answers,submitTime}
+				sendToQueue('submit',JSON.stringify(data))
+				//  console.log(`now : ${now}`)
+				 console.log(`now : ${submitTime}`)
+				 res.status(201).json({ message: `Submission Successful` });
+            }
+            else{
+                res.status(406).json({ message: `Oppss Contest Finished :(` });
+            }
+        }) 
+	
+	}
+	else{
+		res.status(200).json({ message: `Oppss Contest Finished :(` });	
+	}
 });
 
 

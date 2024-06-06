@@ -6,39 +6,39 @@ const cached = async (req,res,next)=>{
     // const cached = await redis.get(id)
     // console.log(` Cached Data : ${cached}`)
 
-    const details = await redis.exists(`withOutQuestions : ${id}`)
-    const questions = await redis.exists(`withQuestions : ${id}`)
+    const details = await redis.exists(`withOutQuestions:${id}`)
+    const questions = await redis.exists(`withQuestions:${id}`)
+    console.log(`Details : ${details}`)
+    console.log(`Questions : ${questions}`)
     
     if(details){
-        await redis.get(`withOutQuestions : ${id}`).then((result) => {
+        await redis.get(`withOutQuestions:${id}`).then((result) => {
             if(result != null){
                 const jresult = JSON.parse(result)
-                console.log(` Cached Data : ${jresult}`); // Prints "value"
+                console.log(`Contest Data From Cache : ${jresult}`); // Prints "value"
                 res.status(200).json(jresult)
             }
-            // else{
-            //     next()
-            // }
+            else{
+                next()
+            }
         })    
     }else if(questions){
-        await redis.get(`withOutQuestions : ${id}`).then((result) => {
+        await redis.get(`withOutQuestions:${id}`).then((result) => { // This aPart is not Working
+            console.log(result) // Why result is null?
             if(result != null){
                 const jresult = JSON.parse(result)
-                console.log(` Cached Data : ${jresult}`); // Prints "value"
+                console.log(`Question Data From Cache : ${jresult}`); // Prints "value"
                 res.status(200).json(jresult)
             }
-            // else{
-            //     next()
-            // }
+            else{
+                next()
+            }
         })        
     }else{
         next()
     }
-
-
-
-
     
 }
+
 
 module.exports = {cached}

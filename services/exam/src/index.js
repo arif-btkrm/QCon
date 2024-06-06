@@ -73,8 +73,8 @@ app.use((err, _req, res, _next) => {
 const port = process.env.PORT || 3004;
 const serviceName = process.env.SERVICE_NAME || 'Exam-Service';
 
-const now = new Date()
-console.log(` Now : ${now}`)
+// const now = new Date()
+// console.log(` Now : ${now}`)
 
 app.listen(port, ()=>{console.log(`${serviceName} Server is running on port: ${port}`)})
 

@@ -8,6 +8,11 @@ const {makeResultByExamId,getResultByExamId,getMyResult} = require('./controller
 
 require('./recieveQueue')
 
+const {redis} = require('./redis/redis')
+require('./redis/onKeyExpired')
+
+// const {expEvent} = require('./redis/midlewares')
+
 dotenv.config();
 
 const app = express()
@@ -69,6 +74,10 @@ app.use((err, _req, res, _next) => {
 
 const port = process.env.PORT || 3006;
 const serviceName = process.env.SERVICE_NAME || 'Result-Service';
+
+// redis.setex('running_contest_id:10' ,10,"Hi from Result")
+
+
 
 
 app.listen(port, ()=>{console.log(`${serviceName} Server is running on port: ${port}`)})
