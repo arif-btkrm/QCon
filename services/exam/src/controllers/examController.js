@@ -3,7 +3,7 @@ const {redis} = require('./../redis/redis')
 const {getQuestionOnlyByIds} = require('./utils')
 
 
-const addExam = async (req,res)=>{
+const addExam = async (req,res)=>{ // need to choose time format for storing in db
     const addedBy  = req.headers['x-user-id']
     const {name, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,classId,courseId} = req.body 
     const time1 = (req.body.time)
@@ -25,7 +25,7 @@ const addExam = async (req,res)=>{
 
 const addSubmit = async (req,res)=>{ // need to do later
     // const user_id  = req.headers['x-user-id']
-    const {examId, userId, answers} = req.body
+    const {examId, userId, answers} = req.body // user id should get from headers
     const submitTime = new Date();
     console.log(req.body);
     
@@ -40,6 +40,8 @@ const addSubmit = async (req,res)=>{ // need to do later
 };
 const addSubmitByMessage = async (data)=>{ // Need to implement Later
         console.log(` Sebmited message data : ${data}`)
+        console.log(` Sebmited message Count data : ${data.messageCount}`)
+
 //     const { examId, userId, submitTime, answers} = data
 //    console.log(answers);
    
@@ -92,14 +94,15 @@ const getExamById = async (req,res)=>{
         }else if(now > examTime && now < examEnd){
             // redis.set(`running_contest_id:${id}`,"running...")
             // redis.expireat(`running_contest_id:${id}`,examEnd)
+            console.log('Contest is running')
             const ExpTime = examEnd-now // In Seconds
             redis.setex(`running_contest_id:${id}`,ExpTime,"running...")
             const qids = data.questions
             const qstns = await getQuestionOnlyByIds(qids)
             data.questions = qstns
-            const sdata = JSON.stringify(data)
-            console.log(`Exp Time for running Contest : ${ExpTime}`)
-            redis.setex(`withQuestions:${id}`,ExpTime,sdata)
+            const sqdata = JSON.stringify(data)
+            console.log(`Value of sqdata : ${sqdata}`)
+            redis.setex(`withQuestions:${id}`,ExpTime,sqdata)
             
             res.status(200).json(data)
             

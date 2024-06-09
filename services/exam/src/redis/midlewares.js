@@ -23,7 +23,7 @@ const cached = async (req,res,next)=>{
             }
         })    
     }else if(questions){
-        await redis.get(`withOutQuestions:${id}`).then((result) => { // This aPart is not Working
+        await redis.get(`withQuestions:${id}`).then((result) => { // This aPart is not Working
             console.log(result) // Why result is null?
             if(result != null){
                 const jresult = JSON.parse(result)
