@@ -22,7 +22,6 @@ const getMyResult = async (req,res)=>{
 
 const makeResultByExamId = async (req,res)=>{
     const { examId } = req.body
-    
     const examdetails = await getExam(examId)
     const qids = examdetails.questionids
     const questions = await getQuestions(qids)
@@ -44,7 +43,37 @@ const makeResultByExamId = async (req,res)=>{
         console.log(err)
         res.sendStatus(500)
     }
+      
+};
 
+const makeResultByExamIdEvent = async (id)=>{        // Called from event expired
+    console.log("makeResultByExamIdEvent Called")
+    const examId  = id
+    // console.log("examId from parameter")
+    // console.log(examId)
+    const examdetails = await getExam(examId)
+    console.log("Exam Details :")
+    console.log(examdetails)
+    const qids = examdetails.questions_ids
+    const questions = await getQuestions(qids)
+    // console.log("Questions :")
+    // console.log(questions)
+    const submissions = await getSubmissions(examId)
+    // console.log("Submissions :")
+    // console.log(submissions)
+    const results =  await calculateResult(examdetails,questions,submissions)
+    
+    const sqlValues = objToValueString(results)
+   
+    try{
+        await pool.query(`INSERT INTO result (exam_id, rank, user_id, duration, marks, correct_ans, wrong_ans, status, submission) VALUES ${sqlValues.join(', ')}`)
+        console.log("Insertion Result Successful")
+        // neet to send a message to result service with contest id to delete all submit of this id from submit table
+
+    }catch(err){
+        console.log("Result Operation Failed")
+        console.log(err)
+    }
       
 };
 
@@ -64,4 +93,4 @@ const getResultByExamId = async (req,res)=>{
 
 
 
-module.exports = {makeResultByExamId,getResultByExamId,getMyResult};
+module.exports = {makeResultByExamId,getResultByExamId,getMyResult,makeResultByExamIdEvent};

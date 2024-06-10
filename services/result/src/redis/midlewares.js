@@ -39,19 +39,19 @@ const cached = async (req,res,next)=>{
 
 
 const expEvent = ()=>{
-    const sub = redis
-    const pub = redis
-    const subKey = '__keyevent@0__:expired';
-    const myKey = 'myKey'
+    // const sub = redis
+    // const pub = redis
+    // const subKey = '__keyevent@0__:expired';
+    // const myKey = 'myKey'
 
-    sub.subscribe(myKey, () => {
-        console.log('Subscribed to key expiration events!');
-    });
+    // sub.subscribe(myKey, () => {
+    //     console.log('Subscribed to key expiration events!');
+    // });
 
-    sub.on('message', (channel, message) => {
-        console.log(`Key expired: ${message}`);
-        // Handle the expired key event here
-    });
+    // sub.on('message', (channel, message) => {
+    //     console.log(`Key expired: ${message}`);
+    //     // Handle the expired key event here
+    // });
 
         
     // Example: Set a key to expire in 5 seconds

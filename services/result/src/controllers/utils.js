@@ -15,12 +15,13 @@ const getExam = async (examId)=>{
         });
     }catch(err){
         console.log(err)
-        res.sendStatus(500)
+        // res.sendStatus(500)
     }
     return exam
 }
 
 const getQuestions = async (qids)=>{
+    console.log("getQuestion Called")
     let questions
     try{
         await axios.post(`${QUESTION_SERVICE}/questions-ans`,{ids:qids})
@@ -37,27 +38,28 @@ const getQuestions = async (qids)=>{
 }
 
 const getSubmissions = async (examid)=>{
+    console.log("getSubmissions Called :")
     let submissions
     try{
-        await axios.get(`${EXAM_SERVICE}/submits/${examid}`,)
+        await axios.get(`${EXAM_SERVICE}/submits/${examid}`)
           .then(function (response) {
+            // console.log(response)
             submissions = response.data
-            
         })
         .catch(function (error) {
             console.log(error);
-            res.status(error.response.status).send(error.response.data);
+            // res.status(error.response.status).send(error.response.data);
             
         });
     }catch(err){
         console.log(err)
-        res.sendStatus(500)
+        // res.sendStatus(500)
     }
     return submissions
 }
 
 const calculateResult = async(examdetails,questions,submissions)=>{
-    
+    console.log("Calculate Result Called :")
     let finalResults = []
     submissions.forEach(submit => {
         let Marks = 0 
@@ -65,15 +67,16 @@ const calculateResult = async(examdetails,questions,submissions)=>{
         let correctAns = 0
         let wrongAns = 0
         let Status = ''
-        const nagMark = examdetails.nagetivemarks
-        userId = submit.userid
-        examid = submit.examid
-        duration = getDuration(submit.submittime, examdetails.time,examdetails.duration_munite) // miliSeconds
+        const nagMark = examdetails.negative_marks
+        userId = submit.user_id
+        examid = submit.exam_id
+        
+        duration = getDuration(submit.submit_time, examdetails.time,examdetails.duration_munite) // miliSeconds
         
         answers = JSON.parse(submit.answers)
         questions.forEach(question=>{
            const id = question.id
-            if(question.ans == answers[id]){
+            if(question.correct_ans == answers[id]){
                 Marks++;
                 correctAns++
                 question.your_ans = answers[id]
@@ -86,7 +89,7 @@ const calculateResult = async(examdetails,questions,submissions)=>{
             }
             
         })
-        if(Marks>=examdetails.passmarks){
+        if(Marks>=examdetails.pass_marks){
             Status = "Pass"
         }else{
             Status = "Fail"
@@ -95,7 +98,7 @@ const calculateResult = async(examdetails,questions,submissions)=>{
         finalResults.push(result)
     });
 
-    finalResults.sort((a,b) => a.duration - b.duration) // Sorted By duration in descending
+    // finalResults.sort((a,b) => a.duration - b.duration) // Sorted By duration in descending
     finalResults.sort((a,b) => b.marks - a.marks) // Sorted By marks
     finalResults = addRank(finalResults) // included Rank Number
     console.log(finalResults)
@@ -111,7 +114,7 @@ const addRank = (finalResults)=>{
 }
 
 const objToValueString = (objs)=>{
-    const sqlValues = objs.map(item => `(${item.exam_id}, '${item.rank}', '${item.user_id}','${item.submit_time}','${item.marks}','${item.correct_ans}','${item.wrong_ans}','${item.status}', '${item.submission}')`);
+    const sqlValues = objs.map(item => `(${item.exam_id}, '${item.rank}', '${item.user_id}','${item.duration}','${item.marks}','${item.correct_ans}','${item.wrong_ans}','${item.status}', '${item.submission}')`);
     return sqlValues
 }
 const getDuration = (submittime, time, maxDuration)=>{

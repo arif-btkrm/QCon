@@ -20,7 +20,7 @@ const auth = async (req, res, next) => {
 				},
 			}
 		);
-		console.log(data)
+		// console.log(data)
 		if(data){
 			req.headers['x-user-id'] = data.user.id;
 			req.headers['x-user-email'] = data.user.email;

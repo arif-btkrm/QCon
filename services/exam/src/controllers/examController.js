@@ -4,18 +4,16 @@ const {getQuestionOnlyByIds} = require('./utils')
 
 
 const addExam = async (req,res)=>{ // need to choose time format for storing in db
-    const addedBy  = req.headers['x-user-id']
-    const {name, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,classId,courseId} = req.body 
-    const time1 = (req.body.time)
-    console.log(` Time from Raw Form Date : ${time1}`)
-    const time2 = new Date(req.body.time)
-    console.log(`Time from new Date ${time2}`)
-    const time3 = new Date(req.body.time).toISOString()
-    console.log(` Time of To String${time3}`)
+    const added_by  = req.headers['x-user-id']
+    const {name, duration_munite, total_marks,pass_marks, negative_marks, questions_ids, class_id, course_id} = req.body 
+    // const time2 = new Date(req.body.time) // Working
+    // console.log(`Time from new Date ${time2}`)
+    const time = new Date(req.body.time).toISOString() // working
+    console.log(` Time of To String${time}`)
     // console.log(req.body);
     try{
-        await pool.query('INSERT INTO exam (name, time, duration_munite, total_marks, pass_marks, negative_marks, questions, class_id,course_id, added_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)', [name, time3, durationMunite, totalMarks,passMarks, nagetiveMarks, questionIds,classId,courseId,addedBy] )
-        res.status(201).send( {message: ` create Exam Successful`})
+        await pool.query('INSERT INTO exam (name, time, duration_munite, total_marks, pass_marks, negative_marks, questions_ids, class_id,course_id, added_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)', [name, time, duration_munite, total_marks,pass_marks, negative_marks, questions_ids,class_id,course_id,added_by] )
+        res.status(201).send( {message: `create Exam Successful`})
 
     }catch(err){
         console.log(err)
@@ -39,20 +37,18 @@ const addSubmit = async (req,res)=>{ // need to do later
     }   
 };
 const addSubmitByMessage = async (data)=>{ // Need to implement Later
-        console.log(` Sebmited message data : ${data}`)
-        console.log(` Sebmited message Count data : ${data.messageCount}`)
+        // console.log(` Sebmited message data : ${JSON.parse(data)}`)
+        // console.log(` Sebmited message Count data : ${data.messageCount}`)
 
-//     const { examId, userId, submitTime, answers} = data
+    const { examId, userId, submitTime, answers} = data
 //    console.log(answers);
    
-//    try{
-//        await pool.query('INSERT INTO submit (  exam_id, user_id, submit_time, answers) VALUES ($1, $2, $3, $4)', [ examId, userId, submitTime, answers] )
-//     //    res.status(201).send( {message: ` Submission Successful`})
-
-//    }catch(err){
-//        console.log(err)
-//     //    res.sendStatus(500)
-//    }   
+   try{
+       await pool.query('INSERT INTO submit (  exam_id, user_id, submit_time, answers) VALUES ($1, $2, $3, $4)', [ examId, userId, submitTime, answers] )
+        console.log("Submit by message Successful")
+   }catch(err){
+       console.log(err)
+   }   
 };
 
 const getExams = async (req,res)=>{
@@ -83,7 +79,7 @@ const getExamById = async (req,res)=>{
         const examEnd =  examTime + (data.duration_munite*60)  // in Seconds
         // console.log(`Exam End: ${new Date(examEnd*1000)}`)
         if(now < examTime){
-            delete data.questions
+            delete data.questions_ids
             
             const sdata = JSON.stringify(data)
             const ExpTime = examTime-now // In Seconds
@@ -97,18 +93,18 @@ const getExamById = async (req,res)=>{
             console.log('Contest is running')
             const ExpTime = examEnd-now // In Seconds
             redis.setex(`running_contest_id:${id}`,ExpTime,"running...")
-            const qids = data.questions
+            const qids = data.questions_ids
             const qstns = await getQuestionOnlyByIds(qids)
             data.questions = qstns
             const sqdata = JSON.stringify(data)
-            console.log(`Value of sqdata : ${sqdata}`)
+            // console.log(`Value of sqdata : ${sqdata}`)
             redis.setex(`withQuestions:${id}`,ExpTime,sqdata)
             
             res.status(200).json(data)
             
         }
         else{
-            const qids = data.questions
+            const qids = data.questions_ids
             const qstns = await getQuestionOnlyByIds(qids)
             data.questions = qstns            
             res.status(200).json(data)
@@ -126,10 +122,11 @@ const getExamById = async (req,res)=>{
 
 const getSubmitsByExamId = async (req,res)=>{ // internally call by result service
     const { examid } = req.params
-    // console.log(id)
+    // console.log(examid)
     try{
-        let data = await pool.query(`SELECT * FROM submit WHERE examid = '${examid}'`)
+        let data = await pool.query(`SELECT * FROM submit WHERE exam_id = '${examid}'`)
         res.status(200).json(data.rows)
+        // return data.rows
 
     }catch(err){
         console.log(err)

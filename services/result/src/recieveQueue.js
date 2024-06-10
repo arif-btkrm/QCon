@@ -29,3 +29,31 @@ recieveFromQueue('setup', async (msg)=>{
         console.log(err)
     }
 })
+
+const recieveSubmitFromQueue = async (queue)=>{
+    const connection = await amqp.connect(QUEUE_URL)
+    const channel = await connection.createChannel()
+
+    const exchange = 'submit'
+    await channel.assertExchange(exchange, 'direct', {durable:true})
+
+    const q = await channel.assertQueue(queue, {durable:true})
+    await channel.bindQueue(q.queue, exchange, queue)
+
+    // channel.consume(q.queue, (msg)=>{
+    //     if(msg){
+    //         callback(msg.content.toString())
+    //     }
+    // }, {noAck : true})
+    channel.checkQueue(queue,(err,result)=>{
+        if(err){
+            console.log(err)
+            return;
+        }
+        console.log('Queue :', result.queue);
+        console.log('Message count:', result.messageCount);
+        return result.messageCount
+    })
+}
+
+module.exports = {recieveSubmitFromQueue}

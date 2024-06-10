@@ -60,6 +60,7 @@ app.post('/api/exam/submit', auth, isStudent, async (req, res) => { // will do l
 	if(running){
 		await redis.get(`running_contest_id:${examId}`).then((result) => {
 			if(result === 'running...'){
+				console.log(` result : ${result}`)
 				
 				const now = new Date()
 				const submitTime = now
@@ -68,19 +69,20 @@ app.post('/api/exam/submit', auth, isStudent, async (req, res) => { // will do l
 				//  submitTime = now.getTime()
 				 
 				const data = {examId,userId,answers,submitTime}
-				sendToQueue('submit',JSON.stringify(data))
-				//  console.log(`now : ${now}`)
-				 console.log(`now : ${submitTime}`)
-				 res.status(201).json({ message: `Submission Successful` });
+				const sdata = JSON.stringify(data)
+				// console.log(sdata)
+				sendToQueue('submit',sdata)
+				//  console.log(`now : ${submitTime}`)
+				 res.status(201).json({ message: `Submission Successful` });			
             }
             else{
-                res.status(406).json({ message: `Oppss Contest Finished :(` });
+                res.status(406).json({ message: `Oppss Contest Not Running... :( ` });
             }
         }) 
 	
 	}
 	else{
-		res.status(200).json({ message: `Oppss Contest Finished :(` });	
+		res.status(200).json({ message: `Oppss Contest Not Running... :( ` });	
 	}
 });
 
