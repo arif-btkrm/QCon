@@ -49,21 +49,20 @@ const makeResultByExamId = async (req,res)=>{
 const makeResultByExamIdEvent = async (id)=>{        // Called from event expired
     console.log("makeResultByExamIdEvent Called")
     const examId  = id
-    const examdetails = await getExam(examId)
-    const qids = examdetails.questions_ids
-    const questions = await getQuestions(qids)
-    const submissions = await getSubmissions(examId)
-    const results =  await calculateResult(examdetails,questions,submissions)
-    
-    const sqlValues = objToValueString(results)
-   
     try{
+        const examdetails = await getExam(examId)
+        const qids = examdetails.questions_ids
+        const questions = await getQuestions(qids)
+        const submissions = await getSubmissions(examId)
+        const results =  await calculateResult(examdetails,questions,submissions)
+        
+        const sqlValues = objToValueString(results)
+   
+   
         await pool.query(`INSERT INTO result (exam_id, rank, user_id, duration, marks, correct_ans, wrong_ans, status, submission) VALUES ${sqlValues.join(', ')}`)
         console.log("Insertion Result Successful")
-        
-    // neet to send a message to result service with contest id to delete all submit of this id from submit table
         const msg = `result done id:${examId}`
-        sendToQueue('result', msg)
+        sendToQueue('result', msg) // message to delete submissions for this id
         console.log("Result send to queue: ")
 
         // send a message to mail servise to send email of students mail

@@ -5,7 +5,7 @@ const {addSubmitByMessage,deleteSubmitsByMessage} = require('./controllers/examC
 
 const QUEUE_URL = 'amqp://host.docker.internal'
 
-const recieveFromQueue = async (queue, callback)=>{
+const recieveFromQueue = async (callback)=>{
     const connection = await amqp.connect(QUEUE_URL)
     const channel = await connection.createChannel()
 

@@ -98,7 +98,7 @@ const calculateResult = async(examdetails,questions,submissions)=>{
     // finalResults.sort((a,b) => a.duration - b.duration) // Sorted By duration in descending
     finalResults.sort((a,b) => b.marks - a.marks) // Sorted By marks
     finalResults = addRank(finalResults) // included Rank Number
-    console.log(finalResults)
+    // console.log(finalResults)
     
     return finalResults
 }

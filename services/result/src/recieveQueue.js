@@ -40,20 +40,33 @@ const recieveSubmitFromQueue = async (queue)=>{
     const q = await channel.assertQueue(queue, {durable:true})
     await channel.bindQueue(q.queue, exchange, queue)
 
-    // channel.consume(q.queue, (msg)=>{
-    //     if(msg){
-    //         callback(msg.content.toString())
-    //     }
-    // }, {noAck : true})
-    channel.checkQueue(queue,(err,result)=>{
-        if(err){
-            console.log(err)
-            return;
+    channel.consume(q.queue, (msg)=>{
+        if(msg){
+            callback(msg.content.toString())
         }
-        console.log('Queue :', result.queue);
-        console.log('Message count:', result.messageCount);
-        return result.messageCount
-    })
+    }, {noAck : true})
+
 }
 
-module.exports = {recieveSubmitFromQueue}
+const getQueMessageCount = async (queue)=>{
+    console.log('getQueMessageCount Called :' +queue)
+
+    const connection = await amqp.connect(QUEUE_URL)
+    const channel = await connection.createChannel()
+    // let queueInfo 
+
+    const exchange = 'submit'
+    await channel.assertExchange(exchange, 'direct', {durable:true})
+
+    const q = await channel.assertQueue(queue, {durable:true})
+    await channel.bindQueue(q.queue, exchange, queue)
+    
+    // check with setInterval
+    const queueInfo = await channel.checkQueue(queue)
+    console.log(queueInfo.messageCount)
+    const queuedMessage = queueInfo.messageCount
+    return queuedMessage
+    
+}
+
+module.exports = {recieveSubmitFromQueue,getQueMessageCount}

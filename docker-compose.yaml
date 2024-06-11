@@ -218,6 +218,15 @@ services:
       - qcon-rabbitmq-data:/var/lib/rabbitmq
     networks:
       - qconNetwork
+  
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog2
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    volumes:
+      - qcon-mailhog:/var/lib/mailhog
 
 networks:
   qconNetwork:
@@ -228,4 +237,4 @@ volumes:
   qcon-pgadmin-data:
   qcon-redis-data:
   qcon-rabbitmq-data:
-  
+  qcon-mailhog:
