@@ -1,8 +1,6 @@
 const axios = require('axios')
 const { QUESTION_SERVICE,EXAM_SERVICE } = require('../config');
 
-
-
 const getExam = async (examId)=>{
     let exam
     try{
@@ -48,8 +46,7 @@ const getSubmissions = async (examid)=>{
         })
         .catch(function (error) {
             console.log(error);
-            // res.status(error.response.status).send(error.response.data);
-            
+            // res.status(error.response.status).send(error.response.data); 
         });
     }catch(err){
         console.log(err)
@@ -124,7 +121,6 @@ const getDuration = (submittime, time, maxDuration)=>{
     duration = (duration<maxDuration)? duration : maxDuration
     
     const DurTime = new Date(duration);
-    
     
     const seconds = DurTime.getSeconds()
     const munits = DurTime.getMinutes()

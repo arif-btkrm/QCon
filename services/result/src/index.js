@@ -7,6 +7,7 @@ const {setupDatabase} = require('./db/setup')
 const {makeResultByExamId,getResultByExamId,getMyResult} = require('./controllers/resultController')
 
 require('./recieveQueue')
+require('./sendQueue')
 
 const {redis} = require('./redis/redis')
 require('./redis/onKeyExpired')
@@ -54,8 +55,6 @@ app.get('/setup', async (req,res)=>{
 })
 
 // routes
-
-
 app.post('/result', makeResultByExamId) // auth,isTeacher
 app.get('/result/:examId', getResultByExamId) // auth 
 app.get('/result/:examId', getMyResult) // auth getMyResult
@@ -74,11 +73,6 @@ app.use((err, _req, res, _next) => {
 
 const port = process.env.PORT || 3006;
 const serviceName = process.env.SERVICE_NAME || 'Result-Service';
-
-// redis.setex('running_contest_id:10' ,10,"Hi from Result")
-
-
-
 
 app.listen(port, ()=>{console.log(`${serviceName} Server is running on port: ${port}`)})
 

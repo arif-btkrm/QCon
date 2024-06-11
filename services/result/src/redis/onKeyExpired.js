@@ -27,7 +27,7 @@ redis.on('message', async(ch,msg)=>{
             // console.log(`Messege Count : ${msgCount}`)
             // }while(msgCount != 0)
 
-            //  // check message count from message queue
+             // check message count from message queue
             // if(msgCount == 0){
                 makeResultByExamIdEvent(id) // not finalized just a trial
             // }

@@ -1,7 +1,7 @@
 const amqp = require('amqplib')
 const {setupDatabase} = require('./db/setup')
-// const { json } = require('express')
-const {addExam,getExams,getExamById,addSubmitByMessage} = require('./controllers/examController')
+
+const {addSubmitByMessage,deleteSubmitsByMessage} = require('./controllers/examController')
 
 const QUEUE_URL = 'amqp://host.docker.internal'
 
@@ -49,13 +49,13 @@ const recieveSubmitFromQueue = async (queue, callback)=>{
 }
 
 recieveSubmitFromQueue('submit', (msg)=>{
-    // console.log(msg)
     const data = JSON.parse(msg)
-    // console.log(`Recieved Submit Msg : ${data}`)
-    // console.log(data)
-
-    // Do The corresponding Task
     addSubmitByMessage(data)
+})
+
+recieveSubmitFromQueue('result', (msg)=>{  // working good
+    const contest_id = msg.replace('result done id:','')
+    deleteSubmitsByMessage(contest_id)
 })
 
 module.exports = {recieveSubmitFromQueue}

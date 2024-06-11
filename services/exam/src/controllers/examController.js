@@ -5,11 +5,9 @@ const {getQuestionOnlyByIds} = require('./utils')
 
 const addExam = async (req,res)=>{ // need to choose time format for storing in db
     const added_by  = req.headers['x-user-id']
-    const {name, duration_munite, total_marks,pass_marks, negative_marks, questions_ids, class_id, course_id} = req.body 
-    // const time2 = new Date(req.body.time) // Working
-    // console.log(`Time from new Date ${time2}`)
+    const {name, duration_munite, total_marks,pass_marks, negative_marks, questions_ids, class_id, course_id} = req.body
     const time = new Date(req.body.time).toISOString() // working
-    console.log(` Time of To String${time}`)
+    // console.log(` Time of To String${time}`)
     // console.log(req.body);
     try{
         await pool.query('INSERT INTO exam (name, time, duration_munite, total_marks, pass_marks, negative_marks, questions_ids, class_id,course_id, added_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)', [name, time, duration_munite, total_marks,pass_marks, negative_marks, questions_ids,class_id,course_id,added_by] )
@@ -25,7 +23,7 @@ const addSubmit = async (req,res)=>{ // need to do later
     // const user_id  = req.headers['x-user-id']
     const {examId, userId, answers} = req.body // user id should get from headers
     const submitTime = new Date();
-    console.log(req.body);
+    // console.log(req.body);
     
     try{
         await pool.query('INSERT INTO submit ( exam_id, user_id, submit_time, answers) VALUES ($1, $2, $3, $4)', [ examId, userId, submitTime, answers] )
@@ -67,13 +65,13 @@ const getExamById = async (req,res)=>{
     const { id } = req.params
     // console.log(id)
     try{
-        let data = await pool.query(`SELECT * FROM exam WHERE id= '${id}' LIMIT 1`)
+        let data = await pool.query(`SELECT * FROM exam WHERE id= '${id}' LIMIT 1`) // Need ro fix exam time issue
         data = data.rows[0]
         let examTime = data.time
-        console.log(`Exam Time : ${examTime}`)
+        // console.log(`Exam Time : ${examTime}`)
         examTime = parseInt(examTime.getTime()/1000) // in Seconds
         let now = new Date()
-        console.log(`Now Time : ${now}`)
+        // console.log(`Now Time : ${now}`)
         now = parseInt(now.getTime()/1000)  // in Seconds
 
         const examEnd =  examTime + (data.duration_munite*60)  // in Seconds
@@ -88,9 +86,6 @@ const getExamById = async (req,res)=>{
             res.status(200).json(data)
             
         }else if(now > examTime && now < examEnd){
-            // redis.set(`running_contest_id:${id}`,"running...")
-            // redis.expireat(`running_contest_id:${id}`,examEnd)
-            console.log('Contest is running')
             const ExpTime = examEnd-now // In Seconds
             redis.setex(`running_contest_id:${id}`,ExpTime,"running...")
             const qids = data.questions_ids
@@ -109,10 +104,6 @@ const getExamById = async (req,res)=>{
             data.questions = qstns            
             res.status(200).json(data)
         }
-        
-        // const sdata = JSON.stringify(data)
-        // const ExpTime = 10 // 10 Seconds
-        // redis.setex(`"${id}"`,ExpTime,sdata)
 
     }catch(err){
         console.log(err)
@@ -134,4 +125,14 @@ const getSubmitsByExamId = async (req,res)=>{ // internally call by result servi
     }   
 };
 
-module.exports = {addExam,getExams,getExamById,addSubmit,getSubmitsByExamId,addSubmitByMessage};
+const deleteSubmitsByMessage = async (examid)=>{ // internally call by result service
+    try{
+        let data = await pool.query(`DELETE FROM submit WHERE exam_id = '${examid}'`)
+        console.log(`All Submissions Deleted for Contest : ${examid}`)
+    }catch(err){
+        console.log(err)
+        // res.sendStatus(500)
+    }   
+};
+
+module.exports = {addExam,getExams,getExamById,addSubmit,getSubmitsByExamId,addSubmitByMessage,deleteSubmitsByMessage};

@@ -76,7 +76,7 @@ app.post('/api/exam/submit', auth, isStudent, async (req, res) => { // will do l
 				 res.status(201).json({ message: `Submission Successful` });			
             }
             else{
-                res.status(406).json({ message: `Oppss Contest Not Running... :( ` });
+                res.status(406).json({ message: `Oppss Somthing Wrong... :( ` });
             }
         }) 
 	

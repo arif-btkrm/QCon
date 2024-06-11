@@ -1,7 +1,7 @@
 const pool = require('../db/db')
 
 const {getExam,getQuestions,getSubmissions,calculateResult,objToValueString} = require('./utils')
-
+const {sendToQueue} = require('./../sendQueue')
 // submitTime.toLocaleTimeString('en-US', {  // Need to work with time to adjust timezone
 //     timeZone: process.env.TZ
 //   })
@@ -49,18 +49,10 @@ const makeResultByExamId = async (req,res)=>{
 const makeResultByExamIdEvent = async (id)=>{        // Called from event expired
     console.log("makeResultByExamIdEvent Called")
     const examId  = id
-    // console.log("examId from parameter")
-    // console.log(examId)
     const examdetails = await getExam(examId)
-    console.log("Exam Details :")
-    console.log(examdetails)
     const qids = examdetails.questions_ids
     const questions = await getQuestions(qids)
-    // console.log("Questions :")
-    // console.log(questions)
     const submissions = await getSubmissions(examId)
-    // console.log("Submissions :")
-    // console.log(submissions)
     const results =  await calculateResult(examdetails,questions,submissions)
     
     const sqlValues = objToValueString(results)
@@ -68,7 +60,13 @@ const makeResultByExamIdEvent = async (id)=>{        // Called from event expire
     try{
         await pool.query(`INSERT INTO result (exam_id, rank, user_id, duration, marks, correct_ans, wrong_ans, status, submission) VALUES ${sqlValues.join(', ')}`)
         console.log("Insertion Result Successful")
-        // neet to send a message to result service with contest id to delete all submit of this id from submit table
+        
+    // neet to send a message to result service with contest id to delete all submit of this id from submit table
+        const msg = `result done id:${examId}`
+        sendToQueue('result', msg)
+        console.log("Result send to queue: ")
+
+        // send a message to mail servise to send email of students mail
 
     }catch(err){
         console.log("Result Operation Failed")
