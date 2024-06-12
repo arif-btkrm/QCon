@@ -156,6 +156,27 @@ services:
       - auth
     restart: on-failure:10
 
+  mail:
+    build:
+      context : ./services/mail
+      dockerfile: Dockerfile
+    image: QCon/mail:v1
+    ports:
+      - '4007:3007'
+    env_file:
+      - ./services/mail/.env
+    environment:
+      - TZ=Asia/Dhaka
+    volumes:
+      - ./services/mail:/app
+    networks:
+      - qconNetwork
+    depends_on:
+      # - postgres
+      # - api-gateway
+      - auth
+    restart: on-failure:10
+
   postgres:
     image: postgres:13
     container_name: qcon_postgres
@@ -221,7 +242,7 @@ services:
   
   mailhog:
     image: mailhog/mailhog
-    container_name: mailhog2
+    container_name: mailhog
     ports:
       - "1025:1025"
       - "8025:8025"

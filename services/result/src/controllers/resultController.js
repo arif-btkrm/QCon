@@ -51,7 +51,7 @@ const makeResultByExamIdEvent = async (id)=>{        // Called from event expire
     const examId  = id
     try{
         const examdetails = await getExam(examId)
-        const qids = examdetails.questions_ids
+        const qids = examdetails.questions_ids // need to handle if examdetails is empty or not
         const questions = await getQuestions(qids)
         const submissions = await getSubmissions(examId)
         const results =  await calculateResult(examdetails,questions,submissions)
