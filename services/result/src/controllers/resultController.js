@@ -61,11 +61,13 @@ const makeResultByExamIdEvent = async (id)=>{        // Called from event expire
    
         await pool.query(`INSERT INTO result (exam_id, rank, user_id, duration, marks, correct_ans, wrong_ans, status, submission) VALUES ${sqlValues.join(', ')}`)
         console.log("Insertion Result Successful")
+        
         const msg = `result done id:${examId}`
         sendToQueue('result', msg) // message to delete submissions for this id
         console.log("Result send to queue: ")
-
+        
         // send a message to mail servise to send email of students mail
+        sendToQueue('mailResult', msg) // message to send own result to their own email
 
     }catch(err){
         console.log("Result Operation Failed")

@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv  = require('dotenv');
 const cors  = require('cors');
 const morgan  = require('morgan');
-const {mail} = require('./mail')
+
+const {sendResultByMail} = require('./contorllers/mailController')
 
 dotenv.config();
 
@@ -10,8 +11,6 @@ const app = express()
 app.use(express.json())
 app.use(cors());
 app.use(morgan('dev'));
-
-await mail().catch(e => console.log(e))
 
 //routes
 app.get('/', (req,res)=>{
@@ -32,6 +31,8 @@ app.get('/health', (req,res)=>{
         res.sendStatus(500)
     }   
 })
+
+app.post('/send-result-by-mail', sendResultByMail)  // http request handler
 
 
 // 404 handler
