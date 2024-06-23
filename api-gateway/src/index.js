@@ -51,14 +51,14 @@ app.get('/admin/setup', (_req, res) => {
 // Submit Part
 
 
-app.post('/api/exam/submit', auth, isStudent, async (req, res) => { // will do later
+app.post('/api/contest/submit', auth, isStudent, async (req, res) => { // will do later
 	
 	userId = req.headers['x-user-id']
-	const {examId,answers} = req.body
+	const {contestId,answers} = req.body
 	// check contes is running or not
-    const running = await redis.exists(`running_contest_id:${examId}`)
+    const running = await redis.exists(`running_contest_id:${contestId}`)
 	if(running){
-		await redis.get(`running_contest_id:${examId}`).then((result) => {
+		await redis.get(`running_contest_id:${contestId}`).then((result) => {
 			if(result === 'running...'){
 				console.log(` result : ${result}`)
 				
@@ -68,7 +68,7 @@ app.post('/api/exam/submit', auth, isStudent, async (req, res) => { // will do l
 				// let submitTime = now.toISOString() 
 				//  submitTime = now.getTime()
 				 
-				const data = {examId,userId,answers,submitTime}
+				const data = {contestId,userId,answers,submitTime}
 				const sdata = JSON.stringify(data)
 				// console.log(sdata)
 				sendToQueue('submit',sdata)

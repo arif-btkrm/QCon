@@ -1,12 +1,12 @@
 const axios = require('axios')
-const { QUESTION_SERVICE,EXAM_SERVICE } = require('../config');
+const { QUESTION_SERVICE,CONTEST_SERVICE } = require('../config');
 
-const getExam = async (examId)=>{
-    let exam
+const getContest = async (contestId)=>{
+    let contest
     try{
-        await axios.get(`${EXAM_SERVICE}/exams/${examId}`)
+        await axios.get(`${CONTEST_SERVICE}/contests/${contestId}`)
           .then(function (response) {
-           exam = response.data
+            contest = response.data
         })
         .catch(function (error) {
             console.log(error);
@@ -15,7 +15,7 @@ const getExam = async (examId)=>{
         console.log(err)
         // res.sendStatus(500)
     }
-    return exam
+    return contest
 }
 
 const getQuestions = async (qids)=>{
@@ -35,11 +35,11 @@ const getQuestions = async (qids)=>{
     return questions
 }
 
-const getSubmissions = async (examid)=>{
+const getSubmissions = async (contestid)=>{
     console.log("getSubmissions Called :")
     let submissions
     try{
-        await axios.get(`${EXAM_SERVICE}/submits/${examid}`)
+        await axios.get(`${CONTEST_SERVICE}/submits/${contestid}`)
           .then(function (response) {
             // console.log(response)
             submissions = response.data
@@ -55,7 +55,7 @@ const getSubmissions = async (examid)=>{
     return submissions
 }
 
-const calculateResult = async(examdetails,questions,submissions)=>{
+const calculateResult = async(contestdetails,questions,submissions)=>{
     console.log("Calculate Result Called :")
     let finalResults = []
     submissions.forEach(submit => {
@@ -64,11 +64,11 @@ const calculateResult = async(examdetails,questions,submissions)=>{
         let correctAns = 0
         let wrongAns = 0
         let Status = ''
-        const nagMark = examdetails.negative_marks
+        const nagMark = contestdetails.negative_marks
         userId = submit.user_id
-        examid = submit.exam_id
+        contestid = submit.contest_id
         
-        duration = getDuration(submit.submit_time, examdetails.time,examdetails.duration_munite) // miliSeconds
+        duration = getDuration(submit.submit_time, contestdetails.time,contestdetails.duration_munite) // miliSeconds
         
         answers = JSON.parse(submit.answers)
         questions.forEach(question=>{
@@ -86,12 +86,12 @@ const calculateResult = async(examdetails,questions,submissions)=>{
             }
             
         })
-        if(Marks>=examdetails.pass_marks){
+        if(Marks>=contestdetails.pass_marks){
             Status = "Pass"
         }else{
             Status = "Fail"
         }
-        const result = { "exam_id": examid,"rank": 0,"user_id": userId, "duration": duration, "marks": Marks, "correct_ans": correctAns, "wrong_ans": wrongAns, "status": Status, "submission": sohwAns} // Can include Submission time
+        const result = { "contest_id": contestid,"rank": 0,"user_id": userId, "duration": duration, "marks": Marks, "correct_ans": correctAns, "wrong_ans": wrongAns, "status": Status, "submission": sohwAns} // Can include Submission time
         finalResults.push(result)
     });
 
@@ -111,7 +111,7 @@ const addRank = (finalResults)=>{
 }
 
 const objToValueString = (objs)=>{
-    const sqlValues = objs.map(item => `(${item.exam_id}, '${item.rank}', '${item.user_id}','${item.duration}','${item.marks}','${item.correct_ans}','${item.wrong_ans}','${item.status}', '${item.submission}')`);
+    const sqlValues = objs.map(item => `(${item.contest_id}, '${item.rank}', '${item.user_id}','${item.duration}','${item.marks}','${item.correct_ans}','${item.wrong_ans}','${item.status}', '${item.submission}')`);
     return sqlValues
 }
 const getDuration = (submittime, time, maxDuration)=>{
@@ -133,4 +133,4 @@ const getDuration = (submittime, time, maxDuration)=>{
     return durationString
 }
 
-module.exports = {getExam,getQuestions,getSubmissions,calculateResult,objToValueString}
+module.exports = {getContest,getQuestions,getSubmissions,calculateResult,objToValueString}

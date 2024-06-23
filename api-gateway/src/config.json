@@ -153,11 +153,11 @@
         }
       ]
     },
-    "exam": {
+    "contest": {
       "url": "http://host.docker.internal:4004",
       "routes": [
         {
-          "path": "/exam",
+          "path": "/contest",
           "methods": [
             "post"
           ],
@@ -166,7 +166,7 @@
           ]
         },
         {
-          "path": "/exams",
+          "path": "/contests",
           "methods": [
             "get"
           ],
@@ -175,7 +175,7 @@
           ]
         },
         {
-          "path": "/exams/:id",
+          "path": "/contests/:id",
           "methods": [
             "get"
           ],

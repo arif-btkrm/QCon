@@ -19,7 +19,7 @@ const mail = async (mailData) =>{
         subject:"contest-result",
         body:mailBody
     })
-    console.log("Message sent : "+info.messageId)
+    console.log("Message sent : "+info.to)
 }
 
 module.exports = {mail}

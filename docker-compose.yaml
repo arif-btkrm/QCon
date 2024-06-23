@@ -69,7 +69,7 @@ services:
       - qconNetwork
     depends_on:
       # - postgres
-      # - api-gateway
+      - api-gateway
       - auth
     restart: on-failure
 
@@ -94,19 +94,19 @@ services:
       - auth
     restart: on-failure:10
   
-  exam:
+  contest:
     build:
-      context : ./services/exam
+      context : ./services/contest
       dockerfile: Dockerfile
-    image: QCon/exam:v1
+    image: QCon/contest:v1
     ports:
       - '4004:3004'
     env_file:
-      - ./services/exam/.env
+      - ./services/contest/.env
     environment:
       - TZ=Asia/Dhaka
     volumes:
-      - ./services/exam:/app
+      - ./services/contest:/app
     networks:
       - qconNetwork
     depends_on:

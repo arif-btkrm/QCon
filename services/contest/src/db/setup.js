@@ -46,14 +46,14 @@ const createTable = async ()=>{
 
 
     // Creating Table 1
-    const TableName1 = 'exam'
+    const TableName1 = 'contest'
     const CreateTableQuery1 = `CREATE TABLE IF NOT EXISTS ${TableName1}(id SERIAL PRIMARY KEY NOT NULL, Name VARCHAR(255) NOT NULL, time timestamptz NOT NULL, duration_munite int NOT NULL, total_marks int NOT NULL, pass_marks int NOT NULL, negative_marks float DEFAULT 0, questions_ids text NOT NULL, class_id int DEFAULT 0, course_id int DEFAULT 0, added_by int NOT NULL)`
     await tb_client.query(`${CreateTableQuery1}`);
     console.log(`created table ${TableName1}.`);
        
     // Creating Table 2
     const TableName2 = 'submit'
-    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, exam_id int REFERENCES exam(id) NOT NULL, user_id int NOT NULL UNIQUE, submit_time timestamptz NOT NULL, answers text NOT NULL)`
+    const CreateTableQuery2 = `CREATE TABLE IF NOT EXISTS ${TableName2}(id SERIAL PRIMARY KEY, contest_id int REFERENCES contest(id) NOT NULL, user_id int NOT NULL UNIQUE, submit_time timestamptz NOT NULL, answers text NOT NULL)`
     await pool.query(`${CreateTableQuery2}`);
     console.log(`created table ${TableName2}`);
 

@@ -1,6 +1,6 @@
 const { Redis } = require('ioredis');
 const {REDIS_HOST,REDIS_PORT} = require('./config')
-const {makeResultByExamIdEvent} = require('./../controllers/resultController')
+const {makeResultByContestIdEvent} = require('./../controllers/resultController')
 const {getQueMessageCount} = require('./../recieveQueue')
 const redis = new Redis({
     host : REDIS_HOST,
@@ -19,10 +19,10 @@ redis.on('message', async(ch,msg)=>{  // Need to organize the expired events to 
             id = msg.replace('running_contest_id:','')
             console.log(`Expired ID : ${id}`)
             
-            const queuedMsg = getQueMessageCount('submit') // This part should be assynchronus
+            const queuedMsg = await getQueMessageCount('submit')
             
             if(queuedMsg == 0){
-                makeResultByExamIdEvent(id) 
+                makeResultByContestIdEvent(id) 
             }
              
 

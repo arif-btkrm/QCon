@@ -4,7 +4,7 @@ const cors  = require('cors');
 const morgan  = require('morgan');
 
 const {setupDatabase} = require('./db/setup')
-const {makeResultByExamId,getResultByExamId,getMyResult} = require('./controllers/resultController')
+const {makeResultByContestId,getResultsByContestId,getMyResult} = require('./controllers/resultController')
 
 require('./recieveQueue')
 require('./sendQueue')
@@ -55,9 +55,9 @@ app.get('/setup', async (req,res)=>{
 })
 
 // routes
-app.post('/result', makeResultByExamId) // auth,isTeacher
-app.get('/result/:examId', getResultByExamId) // auth 
-app.get('/result/:examId', getMyResult) // auth getMyResult
+app.post('/result', makeResultByContestId) // auth,isTeacher
+app.get('/results/:contestId', getResultsByContestId) // auth 
+app.get('/result/:contestId', getMyResult) // auth getMyResult
 
 
 // 404 handler

@@ -1,4 +1,4 @@
-name : Exam Service Test & Push Automation
+name : Contest Service Test & Push Automation
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: Exam-Service Test
+    name: Contest-Service Test
     runs-on: ubuntu-latest
     steps:
       - run: echo "Action Started"
@@ -19,18 +19,18 @@ jobs:
           node-version: '18'
       - name: Install dependencies
         run: |
-          cd services/exam
+          cd services/contest
           npm i --frozen-lockfile
       - name: Run Tests
         run: |
-          cd services/exam
+          cd services/contest
           npm test
       - name: Endings
         run: echo "All Test Passed..."
 
   push-to-registry:
     needs: test
-    name: Push Exam-Service to docker hub
+    name: Push Contest-Service to docker hub
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -48,8 +48,8 @@ jobs:
     - name: Build and Push
       uses: docker/build-push-action@v3
       with:
-        context: ./services/exam
-        file: ./services/exam/Dockerfile
+        context: ./services/contest
+        file: ./services/contest/Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
 
