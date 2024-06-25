@@ -82,7 +82,7 @@ const getContestById = async (req,res)=>{
             const sdata = JSON.stringify(data)
             const ExpTime = contestTime-now // In Seconds
            // console.log(ExpTime)
-            redis.setex(`withOutQuestions:${id}`,ExpTime,sdata)
+            redis.setex(`waiting_for_contest:${id}`,ExpTime,sdata)
             res.status(200).json(data)
             
         }else if(now > contestTime && now < contestEnd){

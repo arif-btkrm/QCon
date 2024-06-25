@@ -3,7 +3,7 @@ const axios = require('axios')
 
 const { AUTH_SERVICE } = require('./../config');
 
-const signupController = async (req,res)=>{
+const signup = async (req,res)=>{
     const {name, email,password} = req.body
     console.log(req.body);
     
@@ -17,7 +17,7 @@ const signupController = async (req,res)=>{
     }   
 };
 
-const signinController = async (req,res)=>{
+const signin = async (req,res)=>{
     
     try{
         await axios.post(`${AUTH_SERVICE}/auth/login`, req.body)
@@ -35,7 +35,7 @@ const signinController = async (req,res)=>{
     }   
 };
 
-const userProfileController = async (req,res)=>{
+const userProfile = async (req,res)=>{
     const id  = req.headers['x-user-id']
     console.log(`Id From req.headers ${id}`)
     try{
@@ -48,7 +48,7 @@ const userProfileController = async (req,res)=>{
     }   
 };
 
-const userByIdController = async (req,res)=>{
+const userById = async (req,res)=>{
     const { id } = req.params
     // console.log(id)
     try{
@@ -62,8 +62,23 @@ const userByIdController = async (req,res)=>{
     }   
 };
 
+const getUsersByIds = async (req,res)=>{
+    const { ids } = req.body
+    console.log("getUsersByIds REQ :")
+    console.log(req)
+    try{
+        let data = await pool.query(`SELECT name, email FROM users WHERE id IN (${ids})`)
+        data = data.rows
+        res.status(200).json(data)
+
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }
+}
+
 // Todo
-const addUserController = async (_req,res)=>{
+const addUser = async (_req,res)=>{
     try{
         // ToDo Add  Admin, teacher by SuperAdmin
         res.status(201).send( {message: ` ${process.env.SERVICE_NAME} Add User`})
@@ -74,4 +89,4 @@ const addUserController = async (_req,res)=>{
     }   
 };
 
-module.exports = {signupController,signinController,userProfileController,addUserController,userByIdController};
+module.exports = {signup,signin,userProfile,addUser,userById,getUsersByIds};

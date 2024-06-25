@@ -171,7 +171,7 @@
             "get"
           ],
           "middlewares": [
-              
+            
           ]
         },
         {
@@ -181,6 +181,29 @@
           ],
           "middlewares": [
             
+          ]
+        }
+      ]
+    },
+    "result": {
+      "url": "http://host.docker.internal:4004",
+      "routes": [
+        {
+          "path": "/results/:contestId",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+            "auth","isTeacher"
+          ]
+        },
+        {
+          "path": "/result/:contestId",
+          "methods": [
+            "get"
+          ],
+          "middlewares": [
+            "auth","isStudent"
           ]
         }
       ]

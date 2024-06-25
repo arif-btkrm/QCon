@@ -63,8 +63,9 @@ const getQueMessageCount = async (queue)=>{
     
     // check with setInterval
     const queueInfo = await channel.checkQueue(queue)
-    console.log(queueInfo.messageCount)
+    // console.log(queueInfo.messageCount)
     const queuedMessage = queueInfo.messageCount
+    console.log(`Queued Message : ${queuedMessage}`)
     return queuedMessage
     
 }

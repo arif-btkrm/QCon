@@ -91,7 +91,7 @@ const seedTable = async ()=>{
     console.log(`Data From table ${TableName2} : ${data2}`);
 
     if(data2.rowCount == 0){
-        const InsertQuery2 = `INSERT INTO ${TableName2}(Name, email, password, role_id) VALUES ('Mr. SuperAdmin','superadmin@qcon.com','superadmin',1),('Mr. Admin','admin@qcon.com','admin',2),('Mr. Teacher','teacher@qcon.com','teacher',3),('Mr. Student','student@qcon.com','student',4)`
+        const InsertQuery2 = `INSERT INTO ${TableName2}(Name, email, password, role_id) VALUES ('Mr. SuperAdmin','superadmin@qcon.com','superadmin',1),('Mr. Admin','admin@qcon.com','admin',2),('Mr. Teacher 1','teacher1@qcon.com','teacher1',3),('Mr. Teacher 2','teacher2@qcon.com','teacher2',3),('Mr. Student 1','student1@qcon.com','student1',4),('Mr. Student 2','student2@qcon.com','student2',4),('Mr. Student 3','student3@qcon.com','student3',4),('Mr. Student 4','student4@qcon.com','student4',4),('Mr. Student 5','student5@qcon.com','student5',4),('Mr. Student 6','student6@qcon.com','student6',4),('Mr. Student 7','student7@qcon.com','student7',4),('Mr. Student 8','student8@qcon.com','student8',4),('Mr. Student 9','student9@qcon.com','student9',4),('Mr. Student 10','student10@qcon.com','student10',4)`
         await tb_client.query(`${InsertQuery2}`);
         console.log(`Seeded table ${TableName2}.`);
     }

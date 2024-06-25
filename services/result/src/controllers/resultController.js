@@ -77,11 +77,12 @@ const makeResultByContestIdEvent = async (id)=>{        // Called from event exp
 };
 
 const getResultsByContestId = async (req,res)=>{
-    const { contestid } = req.params
+    const { contestId } = req.params
+    // console.log(contestId)
     const role  = req.headers['x-user-role']
-    console.log(role)
+    // console.log(role)
     try{
-        let data = await pool.query(`SELECT * FROM result WHERE id IN (${contestid})`)
+        let data = await pool.query(`SELECT * FROM result WHERE contest_id= ${contestId}`)
         data = data.rows
         res.status(200).json(data)
 

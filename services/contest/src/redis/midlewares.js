@@ -6,13 +6,13 @@ const cached = async (req,res,next)=>{
     // const cached = await redis.get(id)
     // console.log(` Cached Data : ${cached}`)
 
-    const details = await redis.exists(`withOutQuestions:${id}`)
+    const details = await redis.exists(`waiting_for_contest:${id}`)
     const questions = await redis.exists(`withQuestions:${id}`)
     console.log(`Details : ${details}`)
     console.log(`Questions : ${questions}`)
     
     if(details){
-        await redis.get(`withOutQuestions:${id}`).then((result) => {
+        await redis.get(`waiting_for_contest:${id}`).then((result) => {
             if(result != null){
                 const jresult = JSON.parse(result)
                 console.log(`Contest Data From Cache : ${jresult}`); // Prints "value"

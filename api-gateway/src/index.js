@@ -4,6 +4,12 @@ const dotenv =  require('dotenv');
 const helmet =  require('helmet');
 const rateLimit =  require('express-rate-limit');
 const morgan =  require('morgan');
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs');
+
+const swaggerDoc = YAML.load('./swagger.yaml');
+const OpenApiValidator = require('express-openapi-validator');
+
 const {auth, isStudent}  = require('./middlewares')
 const { configureRoutes } = require('./utils')
 
@@ -34,6 +40,13 @@ app.use('/api', limiter);
 app.use(morgan('dev'));
 app.use(express.json());
 
+// app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+// app.use(
+// 	OpenApiValidator.middleware({
+// 		apiSpec: './swagger.yaml',
+// 	})
+// );
+
 // routes
 configureRoutes(app);
 
@@ -51,7 +64,7 @@ app.get('/admin/setup', (_req, res) => {
 // Submit Part
 
 
-app.post('/api/contest/submit', auth, isStudent, async (req, res) => { // will do later
+app.post('/api/v1/contest/submit', auth, isStudent, async (req, res) => { // will do later
 	
 	userId = req.headers['x-user-id']
 	const {contestId,answers} = req.body

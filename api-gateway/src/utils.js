@@ -47,7 +47,7 @@ const configureRoutes = (app) => {
 		const hostname = service.url;
 		service.routes.forEach((route) => {
 			route.methods.forEach((method) => {
-				const endpoint = `/api${route.path}`;
+				const endpoint = `/api/v1${route.path}`;
 				const middleware = getMiddlewares(route.middlewares);
 				// console.log(endpoint)
 				const handler = createHandler(hostname, route.path, method);

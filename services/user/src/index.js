@@ -4,7 +4,7 @@ const cors  = require('cors');
 const morgan  = require('morgan');
 
 const {setupDatabase} = require('./db/setup')
-const {signinController,signupController,userProfileController,addUserController,userByIdController} = require('./controllers/userController')
+const {signin,signup,userProfile,addUser,userById,getUsersByIds} = require('./controllers/userController')
 
 require('./recieveQueue')
 
@@ -50,11 +50,12 @@ app.get('/setup', async (req,res)=>{
 
 // routes
 
-app.post('/user/signup', signupController)
-app.post('/user/signin', signinController)
-app.post('/user/addUser', addUserController)
-app.get('/user/profile', userProfileController)
-app.get('/users/:id', userByIdController)
+app.post('/user/signup', signup)
+app.post('/user/signin', signin)
+app.post('/user/addUser', addUser)
+app.get('/user/profile', userProfile)
+app.get('/users/:id', userById)
+app.post('/getusers-ids', getUsersByIds)
 
 // 404 handler
 app.use((_req, res) => {
