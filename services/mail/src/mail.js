@@ -4,7 +4,11 @@ const {MAIL_SERVICE,SMTP_HOST,SMTP_PORT,DEFAULT_EMAIL_SENDER} = require('./confi
 
 const transporter =  nodeMailer.createTransport({
     host: SMTP_HOST,
-    port:SMTP_PORT
+    // host : 'localhost',
+    port:SMTP_PORT,
+    secure: false,
+    logger: true, // Enable logging
+    debug: true, // Enable debug output
 })
 
 const mail = async (mailData) =>{
@@ -14,13 +18,23 @@ const mail = async (mailData) =>{
     const mailSubject = "contest-result"
     const mailFrom = DEFAULT_EMAIL_SENDER
     
-    const info = transporter.sendMail({
+    const mailOptions = {
         from: mailFrom,
         to: mailTo,
         subject: mailSubject,
-        body: mailBody
-    })
-    console.log("Message sent : "+info.to)
+        text: mailBody
+    }
+
+    // const info = transporter.sendMail(mailOptions)
+    // console.log("Message sent : "+info.to)
+
+   transporter.sendMail(mailOptions)
+  .then(info => {
+    console.log('Message sent: %s', info.messageId);
+  })
+  .catch(error => {
+    console.error('Error sending email:', error);
+  });
 }
 
 module.exports = {mail}
