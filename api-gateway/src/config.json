@@ -82,6 +82,16 @@
               "auth",
               "isAdmin"
           ]
+        },
+        {
+          "path": "/user/addteacher",
+          "methods": [
+            "post"
+          ],
+          "middlewares": [
+              "auth",
+              "isAdmin"
+          ]
         }
       ]
     },    

@@ -4,7 +4,10 @@ const cors  = require('cors');
 const morgan  = require('morgan');
 
 const {setupDatabase} = require('./db/setup')
-const {signin,signup,userProfile,addUser,userById,getUsersByIds} = require('./controllers/userController')
+const {signin,signup,userProfile,addTeacher,userById,getUsersByIds} = require('./controllers/userController')
+
+const {signInValidation, signUpValidation, addTeacherValidation } = require('./middlewares/validation')
+const isValidate = require('./middlewares/validation/validate')
 
 require('./recieveQueue')
 
@@ -50,9 +53,9 @@ app.get('/setup', async (req,res)=>{
 
 // routes
 
-app.post('/user/signup', signup)
-app.post('/user/signin', signin)
-app.post('/user/addUser', addUser)
+app.post('/user/signup', signUpValidation, isValidate, signup)
+app.post('/user/signin', signInValidation, isValidate, signin)
+app.post('/user/addteacher', addTeacherValidation, isValidate, addTeacher)
 app.get('/user/profile', userProfile)
 app.get('/users/:id', userById)
 app.post('/getusers-ids', getUsersByIds)

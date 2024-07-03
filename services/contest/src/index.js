@@ -6,6 +6,10 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {addContest,getContests,getContestById,addSubmit,getSubmitsByContestId} = require('./controllers/contestController')
 
+const {addContestValidation } = require('./middlewares/validation')
+const isValidate = require('./middlewares/validation/validate')
+
+
 const {cached} = require('./redis/midlewares');
 
 require('./recieveQueue')
@@ -52,7 +56,7 @@ app.get('/setup', async (req,res)=>{
 
 // routes
 
-app.post('/contest', addContest)
+app.post('/contest', addContestValidation, isValidate, addContest)
 app.get('/contests', getContests)
 app.get('/contests/:id', cached, getContestById)
 app.post('/contest/submit', addSubmit)

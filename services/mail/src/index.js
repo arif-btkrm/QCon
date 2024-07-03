@@ -34,6 +34,16 @@ app.get('/health', (req,res)=>{
     }   
 })
 
+// //routes
+// app.get('/test', (req,res)=>{
+//     try{
+//         res.status(200).send({message: "Send mail service Working Good"})
+//     }catch(err){
+//         console.log(err)
+//         res.sendStatus(500)
+//     }   
+// })
+
 app.post('/send-result-by-mail', sendResultByMail)  // http request handler
 
 

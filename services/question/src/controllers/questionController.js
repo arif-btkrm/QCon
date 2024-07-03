@@ -5,11 +5,11 @@ const { AUTH_SERVICE } = require('./../config');
 
 
 const addQuestion = async (req,res)=>{
-    const {question, option1, option2, option3, option4, ans, classId, courseId} = req.body
+    const {question, option1, option2, option3, option4, ans, classId, courseId,addedBy} = req.body
     // console.log(req.body);
     
     try{
-        await pool.query('INSERT INTO question (question, option1, option2, option3, option4, correct_ans, class_id, course_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [question, option1, option2, option3, option4, ans, classId, courseId])
+        await pool.query('INSERT INTO question (question, option1, option2, option3, option4, correct_ans, class_id, course_id, added_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)', [question, option1, option2, option3, option4, ans, classId, courseId, addedBy])
         res.status(201).send( {message: ` create Exam Successful`})
 
     }catch(err){

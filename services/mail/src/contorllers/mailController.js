@@ -4,7 +4,8 @@ const {getContest,getUsersByIds,getResultsByContestId} = require('./utils')
 
 const sendResultByMail = async (req,res)=>{
     try{
-        const mailData = req.mailData  // mailData should be the array of objects
+        const mailData = req.body.mailData  // mailData should be the array of objects
+        // console.log(mailData)
         await mail(mailData).catch(e => console.log(e))
         res.status(200).send({message: "Mail Sent Success!!!"})
     }catch(err){
@@ -64,8 +65,8 @@ const processTheMailBody = async (contest_id)=>{
     //     console.log(result) // rest/spread operation
     // })
     const mailData = {
-        to : "habijabi@qcon.com",
-        body : "Mail Body"
+        "to" : "habijabi@qcon.com",
+        "body" : "Mail Body"
     }
     sendResultMailByMsg (mailData)
 }

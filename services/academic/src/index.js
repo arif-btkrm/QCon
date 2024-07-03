@@ -6,6 +6,10 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {getClass,addClass,getCourse,addCourse,getClassById,getCourseById,getCourseByClassId} = require('./controllers/academicController')
 
+const {addClassValidation,addCourseValidation } = require('./middlewares/validation')
+const isValidate = require('./middlewares/validation/validate')
+
+
 require('./recieveQueue')
 
 dotenv.config();
@@ -50,11 +54,11 @@ app.get('/setup', async (req,res)=>{
 
 // routes
 
-app.post('/class', addClass)
+app.post('/class', addClassValidation, isValidate, addClass)
 app.get('/classes', getClass)
 app.get('/classes/:id', getClassById)
 
-app.post('/course', addCourse)
+app.post('/course', addCourseValidation, isValidate, addCourse)
 app.get('/courses', getCourse)
 app.get('/course/:id', getCourseById)
 app.get('/courses/:classid', getCourseByClassId)

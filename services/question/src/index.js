@@ -6,6 +6,10 @@ const morgan  = require('morgan');
 const {setupDatabase} = require('./db/setup')
 const {getQuestion,addQuestion,getQuestionById,getQuestionsByIds,getQuestionsAnsByIds,getQuestionsOnlyByIds} = require('./controllers/questionController')
 
+const {addQuestionValidation } = require('./middlewares/validation');
+const isValidate = require('./middlewares/validation/validate')
+
+
 require('./recieveQueue')
 
 dotenv.config();
@@ -51,7 +55,7 @@ app.get('/setup', async (req,res)=>{
 // routes
 
 
-app.post('/question', addQuestion)
+app.post('/question', addQuestionValidation, isValidate, addQuestion)
 app.get('/questions', getQuestion)
 app.get('/questions/:id', getQuestionById)
 app.post('/questions', getQuestionsByIds)

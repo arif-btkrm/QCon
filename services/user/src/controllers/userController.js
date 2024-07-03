@@ -77,11 +77,33 @@ const getUsersByIds = async (req,res)=>{
     }
 }
 
-// Todo
-const addUser = async (_req,res)=>{
+const getUserByEmail = async (email)=>{
     try{
-        // ToDo Add  Admin, teacher by SuperAdmin
-        res.status(201).send( {message: ` ${process.env.SERVICE_NAME} Add User`})
+        let data = await pool.query(`SELECT name, email FROM users WHERE email= '${email}' LIMIT 1`)
+        data = data.rows[0]
+        // res.status(200).json(data)
+        // console.log(data)
+        if(data){
+            return true
+        }else{
+            return false
+        }            
+
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500)
+    }
+}
+
+
+const addTeacher = async (req,res)=>{
+    const {name, email,password} = req.body
+    // console.log(req.body);
+    const roleId = 3
+    
+    try{
+        await pool.query('INSERT INTO users (name, email, password, role_id) VALUES ($1, $2, $3, $4)', [name, email, password, roleId] )
+        res.status(201).send( {message: ` Teacher Added Successful`})
 
     }catch(err){
         console.log(err)
@@ -89,4 +111,4 @@ const addUser = async (_req,res)=>{
     }   
 };
 
-module.exports = {signup,signin,userProfile,addUser,userById,getUsersByIds};
+module.exports = {signup,signin,userProfile,addTeacher,userById,getUsersByIds,getUserByEmail};
