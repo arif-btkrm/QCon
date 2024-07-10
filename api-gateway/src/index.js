@@ -41,9 +41,11 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDoc));
-// app.use(
+// app.use( 
 // 	OpenApiValidator.middleware({
 // 		apiSpec: './swagger.yaml',
+// 		validateRequests: true,
+//     	validateResponses: true,
 // 	})
 // );
 

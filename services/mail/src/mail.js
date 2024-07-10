@@ -5,13 +5,6 @@ const {MAIL_SERVICE,SMTP_HOST,SMTP_PORT,DEFAULT_EMAIL_SENDER} = require('./confi
 const transporter =  nodeMailer.createTransport({
     host: SMTP_HOST,
     port:SMTP_PORT,
-    secure: false,
-    logger: true, // Enable logging
-    debug: true, // Enable debug output
-    auth: {
-      user: '', // leave empty
-      pass: ''  // leave empty
-    }
 })
 
 const mail = async (mailData) =>{

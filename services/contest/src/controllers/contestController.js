@@ -10,8 +10,11 @@ const addContest = async (req,res)=>{ // need to choose time format for storing 
     // console.log(` Time of To String${time}`)
     // console.log(req.body);
     try{
-        await pool.query('INSERT INTO contest (name, time, duration_munite, total_marks, pass_marks, negative_marks, questions_ids, class_id,course_id, added_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10)', [name, time, duration_munite, total_marks,pass_marks, negative_marks, questions_ids,class_id,course_id,added_by] )
-        res.status(201).send( {message: `create Contest Successful`})
+        const data =  await pool.query('INSERT INTO contest (name, time, duration_munite, total_marks, pass_marks, negative_marks, questions_ids, class_id,course_id, added_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9,$10) RETURNING id', [name, time, duration_munite, total_marks,pass_marks, negative_marks, questions_ids,class_id,course_id,added_by] )
+        console.log(data)
+        const contest_id = data.rows[0].id
+        console.log(contest_id)
+        res.status(201).send( {message: `Create Contest Successful`,contest_id: `${contest_id}`})
 
     }catch(err){
         console.log(err)
@@ -78,7 +81,8 @@ const getContestById = async (req,res)=>{
         // console.log(`Contest End: ${new Date(contestEnd*1000)}`)
         if(now < contestTime){
             delete data.questions_ids
-            
+            data.time = new Date(contestTime*1000)
+            console.log(data.time)
             const sdata = JSON.stringify(data)
             const ExpTime = contestTime-now // In Seconds
            // console.log(ExpTime)
@@ -99,6 +103,7 @@ const getContestById = async (req,res)=>{
             
         }
         else{
+            // data.time = new Date(data.time)
             const qids = data.questions_ids
             const qstns = await getQuestionOnlyByIds(qids)
             data.questions = qstns            

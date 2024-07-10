@@ -86,7 +86,7 @@ paths:
               required: [email, password]
       responses:
         '200':
-          description: Signin successul
+          description: Signin successful
           content:
             'application/json':
               schema:
@@ -140,78 +140,21 @@ paths:
                             email:
                               type: string
                               example: user@gmail.com
-                          required: [id, name, email]
+                          # required: [id, name, email]
         '400':
           $ref: '#/components/responses/400'
         '500':
           $ref: '#/components/responses/500'
-  '/users/2':
-    post:
-      operationId: createUser
-      security:
-        - bearerAuth: []
+  '/users/{id}':
+    get:
+      operationId: get user by id
       tags: [User]
       description: Get user By Id
       parameters:
-        - $ref: '#/components/parameters/userId'
-      requestBody:
-        description: To create a new user admin must need to provide valid data
-        content:
-          'application/json':
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: user_1
-                email:
-                  type: string
-                  format: email
-                  example: user@gmail.com
-                password:
-                  type: string
-                  format: password
-                  example: user123
-                role:
-                  type: string
-                  enum:
-                    - user
-                    - admin
-                  example: user
-                status:
-                  type: string
-                  enum:
-                    - pending
-                    - approved
-                    - block
-                    - decline
-                  example: pending
-              required: [name, email, password]
-      responses:
-        '201':
-          description: Successfully created a new user
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/UserCreateDTO'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '500':
-          $ref: '#/components/responses/500'
-  '/articles':
-    get:
-      tags: [Article]
-      description: Retrive all published articles
-      parameters:
-        - $ref: '#/components/parameters/limitParam'
-        - $ref: '#/components/parameters/sortTypeParam'
-        - $ref: '#/components/parameters/sortByParam'
-        - $ref: '#/components/parameters/searchParam'
+        - $ref: '#/components/parameters/idPathParam'
       responses:
         '200':
-          description: Return a list of articles
+          description: Return a list of Contests
           content:
             'application/json':
               schema:
@@ -227,99 +170,162 @@ paths:
                               type: integer
                               format: int32
                               example: 1
-                            title:
+                            name:
                               type: string
-                              example: first article
-                            cover:
+                              example: Mr. User
+                            email:
                               type: string
-                              format: url
-                              example: https://s3.aws.com/myfirstblog/124.jpg
-                            author:
-                              $ref: '#/components/schemas/AuthorDTO'
-                            link:
-                              type: string
-                              format: url
-                              example: '/articles/1'
-                          required: [id, title, author]
-                        - $ref: '#/components/schemas/Timestamp'
-                  pagination:
-                    $ref: '#/components/schemas/Pagination'
-                  links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                        format: url
-                        example: '/articles?page=2&limit=10'
-                      next:
-                        type: string
-                        format: url
-                        example: '/articles?page=3&limit=10'
-                      prev:
-                        type: string
-                        format: url
-                        example: '/articles?page=1&limit=10'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          '$ref': '#/components/responses/500'
-    post:
-      operationId: createPost
-      security:
-        - bearerAuth: []
-      tags: [Article]
-      description: Create a new article
-      requestBody:
-        description: To create a new article user must need to provide valid data
-        content:
-          'application/json':
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: First article
-                body:
-                  type: string
-                  format: text
-                  example: Body of the first article
-                cover:
-                  type: string
-                  format: url
-                  example: https://s3.aws.example.com/23nds
-                status:
-                  type: string
-                  enum: [draft, published]
-                  example: draft
-              required: [title, body]
-      responses:
-        '201':
-          description: Successfully created a new article
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/ArticleCreateDTO'
+                              example: mruser@qcon.com
         '400':
           $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
-  '/articles/{id}':
+  '/contests':
     get:
-      tags: [Article]
-      description: Fetch a single article
-      parameters:
-        - $ref: '#/components/parameters/idPathParam'
-        - in: query
-          name: expand
-          description: expand author and comment object
-          schema:
-            type: string
-            example: 'author,comment'
+      tags: [Contest]
+      description: Retrive all Contests
+      # parameters:
+      #   - $ref: '#/components/parameters/limitParam'
+      #   - $ref: '#/components/parameters/sortTypeParam'
+      #   - $ref: '#/components/parameters/sortByParam'
+      #   - $ref: '#/components/parameters/searchParam'
       responses:
         '200':
-          description: 'Single Article view'
+          description: Return a list of Contests
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int32
+                          example: 1
+                        name:
+                          type: string
+                          example: my Contest
+                        time:
+                          type: string
+                          format: date-time
+                          example: 2024-06-23T10:05:00.000Z
+                        duration_munite:
+                          type: integer
+                          format: int32
+                          example: 30
+                        total_marks:
+                          type: integer
+                          format: int32
+                          example: 50
+                        pass_marks:
+                          type: integer
+                          format: int32
+                          example: 25
+                        negative_marks:
+                          type: number
+                          format: float
+                          example: 0.25
+                        class_id:
+                          type: integer
+                          format: int32
+                          example: 25
+                        course_id:
+                          type: integer
+                          format: int32
+                          example: 2
+                        added_by:
+                          type: integer
+                          format: int32
+                          example: 3
+                      #   author:
+                      #     $ref: '#/components/schemas/AuthorDTO'
+                      #   link:
+                      #     type: string
+                      #     format: url
+                      #     example: '/articles/1'
+                      # required: [id, title, author]
+                    # - $ref: '#/components/schemas/Timestamp'
+              # pagination:
+              #   $ref: '#/components/schemas/Pagination'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          '$ref': '#/components/responses/500'
+  '/contest':
+    post:
+      operationId: createPost
+      security:
+        - bearerAuth: []
+      tags: [Contest]
+      description: Create a new contest
+      requestBody:
+        description: Only teacher can create new contest
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "First Contest"
+                time:
+                  type: string
+                  format: date-time
+                  example: "2024-06-26T01:38"
+                durationMunite:
+                  type: integer
+                  format: int32
+                  example: 60
+                total_marks:
+                  type: integer
+                  format: int32
+                  example: 100
+                pass_marks:
+                  type: integer
+                  format: int32
+                  example: 40
+                negative_marks:
+                  type: number
+                  format: float
+                  example: 0.25
+                questions_ids:
+                  type: string
+                  format: text
+                  example: "1,2,3,4,5,6,7,8,9,10"
+                class_id:
+                  type: integer
+                  format: int32
+                  example: 40
+                course_id:
+                  type: integer
+                  format: int32
+                  example: 40
+      responses:
+        '201':
+          description: Successfully created a new article
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/CreateContest'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  '/contests/{id}':
+    get:
+      tags: [Contest]
+      description: Get Contest by Id
+      parameters:
+        - $ref: '#/components/parameters/idPathParam'
+      responses:
+        '200':
+          description: 'Single Contest view'
           content:
             'application/json':
               schema:
@@ -327,29 +333,11 @@ paths:
                 properties:
                   data:
                     allOf:
-                      - $ref: '#/components/schemas/Article'
+                      - $ref: '#/components/schemas/Contest'
                       - type: object
                         properties:
                           author:
                             $ref: '#/components/schemas/AuthorDTO'
-                      - type: object
-                        properties:
-                          comments:
-                            type: array
-                            items:
-                              $ref: '#/components/schemas/Comment'
-                  links:
-                    type: object
-                    properties:
-                      self:
-                        type: string
-                        example: '/articles/1'
-                      author:
-                        type: string
-                        example: '/articles/1/author'
-                      comments:
-                        type: string
-                        example: '/articles/1/comments'
         '400':
           $ref: '#/components/responses/400'
         '404':
@@ -392,16 +380,16 @@ paths:
       responses:
         '200':
           description: 'Successfully Updated'
-          content: &article_update_content
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/ArticleUpdateDTO'
+          # content: &article_update_content
+          #   'application/json':
+          #     schema:
+          #       $ref: '#/components/schemas/ArticleUpdateDTO'
         '201':
           description: 'Successfully Created'
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/ArticleCreateDTO'
+          # content:
+          #   'application/json':
+          #     schema:
+          #       $ref: '#/components/schemas/ArticleCreateDTO'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -439,10 +427,10 @@ paths:
       responses:
         '200':
           description: 'Successfully Updated'
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/ArticleUpdateDTO'
+          # content:
+          #   'application/json':
+          #     schema:
+          #       $ref: '#/components/schemas/ArticleUpdateDTO'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -475,7 +463,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    Article:
+    Contest:
       allOf:
         - type: object
           properties:
@@ -483,27 +471,56 @@ components:
               type: integer
               format: int32
               example: 1
-            authorId:
+            name:
+              type: string
+              example: First Contest
+            time:
+              type: string
+              format: date-time
+              example: 2024-06-23T10:05:00.000Z
+            duration_munite:
+              type: integer
+              format: int32
+              example: 30
+            total_marks:
+              type: integer
+              format: int32
+              example: 50
+            pass_marks:
+              type: integer
+              format: int32
+              example: 25
+            negative_marks:
+              type: number
+              format: float
+              example: 0.25
+            class_id:
+              type: integer
+              format: int32
+              example: 10
+            course_id:
               type: integer
               format: int32
               example: 1
-            title:
-              type: string
-              example: First Article
-            body:
-              type: string
-              format: text
-              example: The body of the first article
-            cover:
-              type: string
-              format: url
-              example: https://s3.aws.example.com/23nds
-            status:
-              type: string
-              enum: [draft, published]
-              example: draft
-          required: [id, authorId, title, body, status]
-        - $ref: '#/components/schemas/Timestamp'
+            added_by:
+              type: integer
+              format: int32
+              example: 3
+        #   required: [id, authorId, title, body, status]
+        # - $ref: '#/components/schemas/Timestamp'
+    CreateContest:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: 'Contest created successfully'
+        contest_id:
+          type: string
+          example: '1'
     User:
       allOf:
         - type: object
@@ -514,129 +531,71 @@ components:
               example: 1
             name:
               type: string
-              example: Ali Akkas
+              example: Student
             email:
               type: string
               format: email
-              example: akkas@gmail.com
+              example: student@gmail.com
             role:
               type: string
               enum:
-                - user
+                - superAdmin
                 - admin
-              example: user
-            status:
-              type: string
-              enum:
-                - pending
-                - approved
-                - block
-                - decline
-              example: pending
-          required: [id, name, email, status]
+                - teacher
+                - student
+              example: student
+            
+          required: [id, name, email]
         - $ref: '#/components/schemas/Timestamp'
-    ArticleCreateDTO:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 201
-        message:
-          type: string
-          example: 'Article created successfully'
-        data:
-          $ref: '#/components/schemas/Article'
-        links:
-          type: object
-          properties:
-            self:
-              type: string
-              format: url
-              example: '/articles/1'
-            author:
-              type: string
-              format: url
-              example: '/articles/1/author'
-            comments:
-              type: string
-              format: url
-              example: '/articles/1/comments'
-    UserCreateDTO:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 201
-        message:
-          type: string
-          example: 'User created successfully'
-        data:
-          $ref: '#/components/schemas/User'
-        links:
-          type: object
-          properties:
-            self:
-              type: string
-              format: url
-              example: '/articles/1'
-            edit:
-              type: string
-              format: url
-              example: '/users/1/edit'
-            delete:
-              type: string
-              format: url
-              example: '/users/1/delete'
-            view:
-              type: string
-              format: url
-              example: '/users/1/view'
-    ArticleUpdateDTO:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          example: 200
-        message:
-          type: string
-          example: Article updated successfully
-        data:
-          $ref: '#/components/schemas/Article'
-        links:
-          type: object
-          properties:
-            self:
-              type: string
-              example: '/articles/1'
-    Comment:
-      allOf:
-        - type: object
-          properties:
-            id:
-              type: integer
-              format: int32
-              example: 1
-            authorId:
-              type: integer
-              format: int32
-              example: 1
-            articleId:
-              type: integer
-              format: int32
-              example: 1
-            body:
-              type: string
-              format: text
-              example: The body of the comment
-            status:
-              type: string
-              enum: [public, private]
-              example: public
-          required: [id, authorId, articleId, body, status]
-        - $ref: '#/components/schemas/Timestamp'
+    # UserCreateDTO:
+    #   type: object
+    #   properties:
+    #     code:
+    #       type: integer
+    #       format: int32
+    #       example: 201
+    #     message:
+    #       type: string
+    #       example: 'User created successfully'
+    #     data:
+    #       $ref: '#/components/schemas/User'
+    #     links:
+    #       type: object
+    #       properties:
+    #         self:
+    #           type: string
+    #           format: url
+    #           example: '/articles/1'
+    #         edit:
+    #           type: string
+    #           format: url
+    #           example: '/users/1/edit'
+    #         delete:
+    #           type: string
+    #           format: url
+    #           example: '/users/1/delete'
+    #         view:
+    #           type: string
+    #           format: url
+    #           example: '/users/1/view'
+    # ArticleUpdateDTO:
+    #   type: object
+    #   properties:
+    #     code:
+    #       type: integer
+    #       format: int32
+    #       example: 200
+    #     message:
+    #       type: string
+    #       example: Article updated successfully
+    #     data:
+    #       $ref: '#/components/schemas/Article'
+    #     links:
+    #       type: object
+    #       properties:
+    #         self:
+    #           type: string
+    #           example: '/articles/1'
     Timestamp:
       type: object
       properties:
@@ -658,38 +617,6 @@ components:
           type: string
           example: 'A.B Raihan'
       required: [id, name]
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          example: 2
-        limit:
-          type: integer
-          format: int32
-          example: 10
-        next:
-          type: integer
-          format: int32
-          example: 3
-        prev:
-          type: integer
-          format: int32
-          example: 1
-        totalPage:
-          type: integer
-          format: int32
-          example: 5
-        totalItems:
-          type: integer
-          format: int32
-          example: 50
-      required:
-        - page
-        - limit
-        - totalPage
-        - totalItems
   responses:
     '500':
       description: 'Internal Server Error'
@@ -773,7 +700,7 @@ components:
                 example: Requested resource not found
   parameters:
     userId:
-      in: query
+      in: path
       name: userId
       description: specific userId
       required: true
@@ -781,42 +708,13 @@ components:
         type: integer
         format: int32
         example: 2
-    limitParam:
-      in: query
-      name: limit
-      description: maximum items to be returned
-      required: true
-      schema:
-        type: integer
-        format: int32
-        example: 10
-    sortTypeParam:
-      in: query
-      name: sort_type
-      description: type of sort (asc or dsc)
-      schema:
-        type: string
-        enum: [asc, dsc]
-        example: dsc
-    sortByParam:
-      in: query
-      name: sort_by
-      description: Sort key
-      schema:
-        type: string
-        example: updatedAt
-    searchParam:
-      in: query
-      name: search
-      description: Search term
-      schema:
-        type: string
-        example: title
+    
     idPathParam:
       in: path
       name: id
       required: true
-      description: Article ID
+      description: id
       schema:
-        type: string
-        example: '64d268cdeef8c84bb18912db'
+        type: integer
+        format: int32
+        example: 2
